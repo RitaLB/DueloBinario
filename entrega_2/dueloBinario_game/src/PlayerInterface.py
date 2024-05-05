@@ -1,9 +1,12 @@
 from tkinter import *
 from tkinter import messagebox
 from PIL import Image, ImageTk
+from tkinter import simpledialog
+from dog.dog_interface import DogPlayerInterface
+from dog.dog_actor import DogActor
 import tkinter as tk
 
-class PlayerInterface:
+class PlayerInterface(DogPlayerInterface):
     def __init__(self):
         self.main_Window = Tk()
         self.main_Window.title("Duelo Binário")
@@ -130,6 +133,7 @@ class PlayerInterface:
         #self.um_preto = PhotoImage(file="imagens/um.png")
         #self.zero_preto = PhotoImage(file="imagens/0.png")
 
+        # Criando Tabuleiro
         self.boardView = []
         self.tabuleiro = [[None for _ in range(12)] for _ in range(12)]
 
@@ -147,10 +151,16 @@ class PlayerInterface:
             self.boardView.append(viewTier)
 
         #self.blueTurn = True
+        
+        # Configurações DOG
+        player_name = simpledialog.askstring(title="Player identification", prompt="Qual o seu nome?")
+        self.dog_server_interface = DogActor()
+        message = self.dog_server_interface.initialize(player_name, self)
+        messagebox.showinfo(message=message)
 
         self.main_Window.mainloop()
 
-    #funções dígito
+    # Funções dígito
     def right_click(self, event, linha, coluna):
         self.boardView[linha-1][coluna-1].configure(image=self.zero_preto)
         #self.tabuleiro[linha % len(self.tabuleiro)][coluna % len(self.tabuleiro[0])] = 0
@@ -159,11 +169,11 @@ class PlayerInterface:
         self.boardView[linha-1][coluna-1].configure(image=self.um_preto)
         #self.tabuleiro[linha % len(self.tabuleiro)][coluna % len(self.tabuleiro[0])] = 0
 
-    #Função botão
+    # Função botão
     def enviar_jogada(self):
         messagebox.showinfo("enviar jogada", "Você clicou em 'enviar jogada' !")
 
-    #Funçõers menu
+    # Funções menu
     def iniciar_jogo(self):
         messagebox.showinfo("iniciar jogo", "Você clicou em 'iniciar jogo' !")
     def novo_jogo(self):

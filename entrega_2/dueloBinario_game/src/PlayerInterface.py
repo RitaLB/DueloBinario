@@ -16,6 +16,8 @@ class PlayerInterface(DogPlayerInterface):
         self.main_Window.resizable(False, False)
         self.main_Window["bg"] = "white"
 
+        # FALTA ADICIONAR IMAGEM DE REGRA DE ORDEM DO NÚMERO
+
         # Criando um menu
         self.menu_bar = Menu(self.main_Window)
         # Criando uma opção de menu "Jogo"
@@ -56,6 +58,7 @@ class PlayerInterface(DogPlayerInterface):
         self.label_regras.grid(row=2, column= 0, columnspan=3)
 
         #Placar
+        '''
         placar_image = Image.open("imagens/placar.png")
         l, h = regras_image.size
         nl = int(l * 0.7)
@@ -64,10 +67,14 @@ class PlayerInterface(DogPlayerInterface):
         # Cria um objeto PhotoImage a partir da imagem redimensionada
         self.placar_image = ImageTk.PhotoImage(placar_image)
         #self.placar_image = PhotoImage(file="imagens/placar.png")
-        self.placar_frame = Frame(self.main_Window, padx=4,  pady=1, bg="white")
+        '''
+        self.placar_frame = Frame(self.main_Window, padx=4,  pady=1, bg="white", borderwidth=1, relief="solid")
         self.placar_frame.grid(row=1, column=0)
-        self.label_placar = Label(self.placar_frame, image = self.placar_image)
-        self.label_placar.grid(row=2, column= 0, columnspan=3)
+        #self.label_placar = Label(self.placar_frame, image = self.placar_image)
+        #self.label_placar.grid(row=2, column= 0, columnspan=3)
+        
+        scoreboard = Scoreboard(self.placar_frame, "Player 1", "Player 2", 10, 5, "red", "blue")
+        scoreboard.pack()
 
         #Terceira linha frame
         self.linha_frame = Frame(self.main_Window, padx=4,  pady=1, bg="white")
@@ -154,6 +161,9 @@ class PlayerInterface(DogPlayerInterface):
         
         # Configurações DOG
         player_name = simpledialog.askstring(title="Player identification", prompt="Qual o seu nome?")
+        # Atualizar nome do jogador local no placar
+        scoreboard.update_player_names(player_name, 1)
+        #continuar conexão com DOG
         self.dog_server_interface = DogActor()
         message = self.dog_server_interface.initialize(player_name, self)
         messagebox.showinfo(message=message)
@@ -174,9 +184,83 @@ class PlayerInterface(DogPlayerInterface):
         messagebox.showinfo("enviar jogada", "Você clicou em 'enviar jogada' !")
 
     # Funções menu
-    def iniciar_jogo(self):
+    def iniciar_jogo(self): #Deveria ser "iniciar partida"?
         messagebox.showinfo("iniciar jogo", "Você clicou em 'iniciar jogo' !")
+        start_status = self.dog_server_interface.start_match(2)
+        message = start_status.get_message()
+        messagebox.showinfo(message=message)
     def novo_jogo(self):
         messagebox.showinfo("novo jogo", "Você clicou em 'novo jogo' !")
 
+    #Funções DOG
+    def receive_start(self, start_status):
+        message = start_status.get_message()
+        messagebox.showinfo(message=message)
+
+class Scoreboard(tk.Frame):
+    def __init__(self, master=None, player1_name="", player2_name="", player1_score=0, player2_score=0, player1_color="red", player2_color="blue"):
+        super().__init__(master, bg = "white")
+        self.master = master
+        self.player1_name = player1_name
+        self.player2_name = player2_name
+        self.player1_score = player1_score
+        self.player2_score = player2_score
+        self.player1_color = player1_color
+        self.player2_color = player2_color
+        self.create_widgets()
+        self.pack()
+
+    
+    def create_widgets(self):
+        # Título
+        self.titulo = tk.Label(self, text="Placar", bg = "white")
+        self.titulo.grid(row=0, column=0, columnspan=3)
+        
+        # Primeira coluna
+        self.player1_label = tk.Label(self, text=self.player1_name,  bg = "white")
+        self.player1_label.grid(row=1, column=1)
+        self.player1_image = self.create_color_image(self.player1_color)
+        self.player1_image_label = tk.Label(self, image=self.player1_image)
+        self.player1_image_label.grid(row=1, column=0)
+
+        self.player2_label = tk.Label(self, text=self.player2_name,  bg = "white")
+        self.player2_label.grid(row=2, column=1)
+        self.player2_image = self.create_color_image(self.player2_color)
+        self.player2_image_label = tk.Label(self, image=self.player2_image)
+        self.player2_image_label.grid(row=2, column=0)
+
+        # Segunda coluna
+        self.player1_score_label = tk.Label(self, text=str(self.player1_score),  bg = "white")
+        self.player1_score_label.grid(row=1, column=2)
+
+        self.player2_score_label = tk.Label(self, text=str(self.player2_score),  bg = "white")
+        self.player2_score_label.grid(row=2, column=2)
+        
+    
+
+        
+    def create_color_image(self, color):
+        img = tk.PhotoImage(width=30, height=30)
+        img.put(color, to=(0, 0, 49, 49))
+        return img
+
+    def update_player_names(self, player_name, num_player):
+        if num_player == 1:
+            self.player1_name = player_name
+            self.player1_label.config(text=self.player1_name)
+        else:
+            self.player2_name = player_name
+            self.player2_label.config(text=self.player2_name)
+
+    def update_player_score(self, player, score):
+        if player == 1:
+            self.player1_score = score
+            self.player1_score_label.config(text=str(self.player1_score))
+        elif player == 2:
+            self.player2_score = score
+            self.player2_score_label.config(text=str(self.player2_score))
+        else:
+            print("Player inválido!")
+
 PlayerInterface()
+

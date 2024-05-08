@@ -73,8 +73,8 @@ class PlayerInterface(DogPlayerInterface):
         #self.label_placar = Label(self.placar_frame, image = self.placar_image)
         #self.label_placar.grid(row=2, column= 0, columnspan=3)
         
-        scoreboard = Scoreboard(self.placar_frame, "Player 1", "Player 2", 10, 5, "red", "blue")
-        scoreboard.pack()
+        self.scoreboard = Scoreboard(self.placar_frame, "Player 1", "Player 2", 0, 0, "red", "blue")
+        self.scoreboard.pack()
 
         #Terceira linha frame
         self.linha_frame = Frame(self.main_Window, padx=4,  pady=1, bg="white")
@@ -162,7 +162,7 @@ class PlayerInterface(DogPlayerInterface):
         # Configurações DOG
         player_name = simpledialog.askstring(title="Player identification", prompt="Qual o seu nome?")
         # Atualizar nome do jogador local no placar
-        scoreboard.update_player_names(player_name, 1)
+        self.scoreboard.update_player_names(player_name, 1)
         #continuar conexão com DOG
         self.dog_server_interface = DogActor()
         message = self.dog_server_interface.initialize(player_name, self)
@@ -187,8 +187,12 @@ class PlayerInterface(DogPlayerInterface):
     def iniciar_jogo(self): #Deveria ser "iniciar partida"?
         messagebox.showinfo("iniciar jogo", "Você clicou em 'iniciar jogo' !")
         start_status = self.dog_server_interface.start_match(2)
+        j = start_status.get_players()
+        jogador_2 = start_status.get_players()[1][0] 
+        self.scoreboard.update_player_names(jogador_2, 2)
         message = start_status.get_message()
         messagebox.showinfo(message=message)
+
     def novo_jogo(self):
         messagebox.showinfo("novo jogo", "Você clicou em 'novo jogo' !")
 
@@ -196,6 +200,8 @@ class PlayerInterface(DogPlayerInterface):
     def receive_start(self, start_status):
         message = start_status.get_message()
         messagebox.showinfo(message=message)
+        jogador_2 = start_status.get_players()[1][0] 
+        self.scoreboard.update_player_names(jogador_2, 2)
 
 class Scoreboard(tk.Frame):
     def __init__(self, master=None, player1_name="", player2_name="", player1_score=0, player2_score=0, player1_color="red", player2_color="blue"):

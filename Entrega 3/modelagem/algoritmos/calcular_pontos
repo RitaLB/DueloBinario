@@ -2,7 +2,7 @@ calcular_pontos(decimal: int)
 
 if decimal == 0:
 	pontuacao_jogador_da_vez = jogador_da_vez.get_pontuacao()
-	pontos = -1 (pontuacao_jogador_da_vez 
+	pontos = -1 (pontuacao_jogador_da_vez )
 	
 else if decimal == 1:
 	numero_1s = contar_1s()

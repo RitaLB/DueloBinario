@@ -30,8 +30,39 @@ class DueloBinario():
         pass
 
     def calcular_pontos(self, decimal: int) -> int: # Verificar se tem retorno msm
-        pass
-
+        match decimal:
+            case 0:
+                pontuacao_jogador_da_vez = self.jogador_da_vez.get_pontuacao()
+                pontos = -1 * pontuacao_jogador_da_vez
+                return pontos
+            case 1:
+                numero_1s = self.contar_1s()
+                if ((numero_1s % 3) == 0):
+                    pontos = 1
+                else:
+                    pontos = 0
+                return pontos
+            case 2:
+                numero_2s = self.contar_2s()
+                if ((numero_2s % 3) == 0):
+                    pontos = 2
+                else: 
+                    pontos = 0
+                return pontos
+            case 6:
+                pontos = 2
+                return pontos
+            case 9:
+                pontos = 3
+                return pontos
+        if ((decimal % 2) == 1):
+            pontos = -1
+            return pontos
+        else:
+            pontos = -2
+        return pontos
+        
+        
     def confirmar_jogada(self):
         pass
 
@@ -102,6 +133,9 @@ class DueloBinario():
             return False
 
     def verificar_jogada(self) -> bool:
+        pass
+    
+    def contar_um(self) -> int:
         pass
 
 

@@ -25,14 +25,59 @@ class Tabuleiro():
         pass
 
     def calcular_decimal(self, linha: int, coluna: int) -> int:
-        pass
+        pos_digito_0 = (linha, coluna + 1)
+        pos_digito_1 = (linha + 1, coluna)
+        pos_digito_2 = (linha, coluna - 1)
+        pos_digito_3 = (linha - 1, coluna)
+        
+        digito_0 = self.tabuleiro[pos_digito_0[0]][pos_digito_0[1]]
+        digito_1 = self.tabuleiro[pos_digito_1[0]][pos_digito_1[1]]
+        digito_2 = self.tabuleiro[pos_digito_2[0]][pos_digito_2[1]]
+        digito_3 = self.tabuleiro[pos_digito_3[0]][pos_digito_3[1]]
+        
+        binario = digito_3 + digito_2 + digito_1 + digito_0
+        
+        decimal_inicial = int(binario)
+        
+        unidades = decimal_inicial - 10
+        
+        if (unidades >= 0):
+            decimal = unidades + 1
+        else:
+            decimal = unidades
+        return decimal
 
     def confirmar_jogada(self):
         pass
 
-    def examinar_casas_brancas(linha: int, coluna: int) -> bool:
-        pass
-
+    def examinar_casas_brancas(self, linha: int, coluna: int) -> bool:
+        lin_casa_branca_0 = (linha -1) % 12
+        col_casa_branca_0 = coluna
+        
+        lin_casa_branca_1 = linha
+        col_casa_branca_1 = (coluna - 1) % 12
+        
+        lin_casa_branca_2 = (linha + 1) % 12
+        col_casa_branca_2 = coluna
+        
+        lin_casa_branca_3 = linha
+        col_casa_branca_3 = (coluna + 1) % 12
+        
+        casas_brancas = [(lin_casa_branca_0, col_casa_branca_0),
+                         (lin_casa_branca_1, col_casa_branca_1),
+                         (lin_casa_branca_2, col_casa_branca_2),
+                         (lin_casa_branca_3, col_casa_branca_3)]
+        
+        grupo_completo = True
+        
+        for casa in casas_brancas:
+            linha = casa[0]
+            coluna = casa[1]
+            habilitada = self.tabuleiro[linha][coluna].habilitada()
+            if (habilitada):
+                grupo_completo = False
+        return grupo_completo
+                
     def inserir_decdimal(linha: int, coluna: int, decimal: int, cor: str):
         pass
 

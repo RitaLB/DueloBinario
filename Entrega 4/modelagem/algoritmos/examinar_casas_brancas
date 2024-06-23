@@ -1,0 +1,33 @@
+examinar_casas_brancas(linha: int, coluna: int) -> bool
+
+// Objetivo verificar se 4 casas brancas em volta da casa preta da coordenada indicada estão preenchidas com dígitos
+
+ // Pegar coordenadas casas brancas:
+ 
+// 11 -> 10 e 0
+// 0 -> 11 e 1
+
+lin_casa_branca_0 = (linha_digito -1) mod 12
+col_casa_branca_0 = coluna_digito
+
+lin_casa_branca_1 = linha_digito
+col_casa_branca_1 = (coluna_digito -1) mod 12
+
+lin_casa_branca_2 = (linha_digito + 1) mod 12
+col_casa_branca_2 = coluna_digito
+
+lin_casa_branca_2 = linha_digito
+col_casa_branca_2 = (coluna_digito +1) mod 12
+
+casas_brancas = [(lin_casa_branca_0, col_casa_branca_0), 
+	        (lin_casa_branca_1, col_casa_branca_1), 
+	        (lin_casa_branca_2, col_casa_branca_2), 
+	        (lin_casa_branca_3, col_casa_branca_3)]
+
+// Se casa está habilitada, significa que grupo não está completo ainda
+grupo_completo = true
+for casa in casas_brancas:
+	if casa.habilitada():
+		grupo_completo = False
+
+return grupo_completo

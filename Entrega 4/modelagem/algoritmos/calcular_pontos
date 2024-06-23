@@ -1,0 +1,31 @@
+calcular_pontos(decimal: int)
+
+if decimal == 0:
+	pontuacao_jogador_da_vez = jogador_da_vez.get_pontuacao()
+	pontos = -1 (pontuacao_jogador_da_vez )
+	
+else if decimal == 1:
+	numero_1s = contar_1s()
+	if (numero_1s % 3) == 0:
+		pontos = 1
+	else:
+		pontos = 0
+		
+else if decimal == 2:
+	numero_2s = contar_2s()
+	if ((numero_2s % 3) == 0):
+		pontos = 2
+	else:
+		pontos = 0
+		
+else if decimal == 6:
+	pontos = 2
+	
+else if decimal == 9:
+	pontos = 3
+	
+else if ((decimal % 2 ) ==1):
+	pontos = -1
+	
+else: 
+	pontos = -2

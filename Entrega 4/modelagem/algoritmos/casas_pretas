@@ -1,0 +1,24 @@
+achar_casas_pretas(linha_digito: int, coluna_digito:int) -> list<(int,int)>
+
+// Objetivo: informar a posicao das 4 casas pretas atreladas à casa branca preenchida pelo digito. Considerando, também, casos de casas nas extremidades. 
+
+// 11 -> 10 e 0
+// 0 -> 11 e 1
+
+lin_casa_preta_0 = (linha_digito -1) mod 12
+col_casa_preta_0 = coluna_digito
+
+lin_casa_preta_1 = linha_digito
+col_casa_preta_1 = (coluna_digito -1) mod 12
+
+lin_casa_preta_2 = (linha_digito + 1) mod 12
+col_casa_preta_2 = coluna_digito
+
+lin_casa_preta_2 = linha_digito
+col_casa_preta_2 = (coluna_digito +1) mod 12
+
+casas_pretas = [(lin_casa_preta_0, col_casa_preta_0), 
+	        (lin_casa_preta_1, col_casa_preta_1), 
+	        (lin_casa_preta_2, col_casa_preta_2), 
+	        (lin_casa_preta_3, col_casa_preta_3)]
+

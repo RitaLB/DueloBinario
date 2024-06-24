@@ -21,13 +21,27 @@ class DueloBinario():
         self.vencedor: str = None # str ou Jogador?
 
     def atualizar_pontuacao_jogador_da_vez(self, pontos: int):
-        pass
+        self.jogador_da_vez.pontuacao = pontos
 
     def avaliar_consequencias_digito(self, linha_digito: int, coluna_digito: int):
         pass
 
     def avaliar_fim_partida(self):
-        pass
+        if (self.Tabuleiro.verificar_tabuleiro_completo()):
+            if (self.jogador_local.pontuacao == 1):
+                self.set_vencedor(self.jogador_local)
+            elif (self.jogador_remoto.pontuacao == 1):
+                self.set_vencedor(self.jogador_remoto)
+            else: 
+                if self.jogador_local.pontuacao > self.jogador_remoto.pontuacao:
+                    self.set_vencedor(self.jogador_local)
+                else:
+                    self.set_vencedor(self.jogador_remoto)
+            self.partida_em_andamento = False
+            return True   #partida acabou
+        else:
+            return False  #partida nao acabou
+                
 
     def calcular_pontos(self, decimal: int) -> int: # Verificar se tem retorno msm
         match decimal:
@@ -70,16 +84,16 @@ class DueloBinario():
         pass
 
     def get_dados_jogada(self) -> tuple[int, int, int]: # digito, coluna, linha
-        pass
+        return tuple()
 
     def get_digito_foi_inserido(self) -> bool:
-        pass
+        return self.digito_inserido
 
     def get_estado_jogo(self) -> EstadoJogo:
-        pass
+        return self.estado_jogo
 
     def get_vecedor(self) -> JogadorDaVez:
-        pass
+        return self.vencedor
 
     def inserir_digito(self, digito: int, linha: int, coluna: int) :
         self.digito_foi_inserido = self.Tabuleiro.inserir_digito(digito, linha, coluna)
@@ -115,7 +129,7 @@ class DueloBinario():
         pass
     
     def set_vencedor(self, jogador: JogadorDaVez): # verificar e atualizar argumentos no diagrama e aqui
-        pass
+        self.vencedor = jogador
     
     def update_nome_jogador(self, nome: str, jogador: int):
         if jogador == 1:

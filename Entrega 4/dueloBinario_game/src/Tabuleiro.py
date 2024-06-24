@@ -113,8 +113,13 @@ class Tabuleiro():
     def verificar_digito_inserido()-> bool:
         pass
 
-    def verificar_tabuleiro_completo():
-        pass
+    def verificar_tabuleiro_completo(self):
+        completo = False
+        for coluna in self.tabuleiro:
+            for posicao in coluna:
+                if (posicao.digito == None):
+                    return False
+        return True
 
     def verificar_preenchimento_posicao() -> bool:
         pass

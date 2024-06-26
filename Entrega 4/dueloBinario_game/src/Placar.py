@@ -56,12 +56,12 @@ class Placar(tk.Frame):
             self.jogador2_name = player_name
             self.jogador2_label.config(text=self.jogador2_name)
 
-    def update_player_score(self,jogador, score):
-        if jogador == 1:
+    def update_player_score(self,jogador: int, score: int):
+        if jogador == 0:
             self.jogador1_score = score
-            self.jogador1_score_label.config(text=str(self.player1_score))
-        elif jogador == 2:
+            self.jogador1_score_label.config(text=str(self.jogador1_score))
+        elif jogador == 1:
             self.jogador2_score = score
-            self.jogador2_score_label.config(text=str(self.player2_score))
+            self.jogador2_score_label.config(text=str(self.jogador2_score))
         else:
             print("Player inválido!")

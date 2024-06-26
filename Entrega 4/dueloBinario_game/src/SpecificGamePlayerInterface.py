@@ -20,6 +20,8 @@ class PlayerInterface(DogPlayerInterface):
         self.main_Frame.grid(row=1, column=1) # $
         self.tabuleiro: list[Label] = self.criar_tabuleiro()
         self.board_view = [] # verificar necessidade
+        self.dados_jogada_atual: dict = None
+        self.estado_jogo : EstadoJogo = EstadoJogo.INICIAL
         self.jogador_da_vez : JogadorDaVez = None
         self.jogo = DueloBinario("", "")
         self.menu_bar = Menu(self.main_Window) 
@@ -29,6 +31,7 @@ class PlayerInterface(DogPlayerInterface):
         self.mensagem_jogador_da_vez : Label = self.criar_mensagem_jogador_da_vez() # $
         self.botao_enviar_jogada: Button = self.criar_botao_enviar_jogada() # $
         self.start_status = None
+        self.jogada_atual : dict = None
 
         # FALTA ADICIONAR IMAGEM DE REGRA DE ORDEM DO NÚMERO
 
@@ -119,13 +122,7 @@ class PlayerInterface(DogPlayerInterface):
         label_vez.grid(row=0, column=1)
 
         return label_vez
-    def atualizar_mensagem_jogador_da_vez(self):
-        if self.jogador_da_vez == JogadorDaVez.LOCAL:
-            cor = "red"
-        else:
-            cor = "blue"
-        self.img_vez.put(cor, to=(0, 0, 30, 30))
-        self.linha_frame.update()
+
 
     def criar_menu(self) -> Menu:
         menu_file = Menu(self.menu_bar, tearoff=0)
@@ -165,7 +162,7 @@ class PlayerInterface(DogPlayerInterface):
         img_empty_black = img_empty_black.resize((nl, nh))
         self.empty_black = ImageTk.PhotoImage(img_empty_black)
 
-        # Dígito 1
+        # Dígito 1 preto
         um_preto= Image.open("imagens/um.png")
         l, h = um_preto.size
         nl = int(l * 0.7)
@@ -173,7 +170,15 @@ class PlayerInterface(DogPlayerInterface):
         um_preto = um_preto.resize((nl, nh))
         self.um_preto = ImageTk.PhotoImage(um_preto)
 
-        # Dígito 0
+        # Dígito 1 azul
+        um_azul= Image.open("imagens/1A.png")
+        l, h = um_azul.size
+        nl = int(l * 0.7)
+        nh = int(h * 0.7)
+        um_azul = um_azul.resize((nl, nh))
+        self.um_azul = ImageTk.PhotoImage(um_azul)
+
+        # Dígito 0 preto
         zero_preto= Image.open("imagens/0.png")
         l, h = zero_preto.size
         nl = int(l * 0.7)
@@ -181,22 +186,182 @@ class PlayerInterface(DogPlayerInterface):
         zero_preto = zero_preto.resize((nl, nh))
         self.zero_preto = ImageTk.PhotoImage(zero_preto)
 
+        # Dígito 0 azul
+        zero_azul= Image.open("imagens/0A.png")
+        l, h = zero_azul.size
+        nl = int(l * 0.7)
+        nh = int(h * 0.7)
+        zero_azul = zero_azul.resize((nl, nh))
+        self.zero_azul = ImageTk.PhotoImage(zero_azul)
+
         boardView = []
-        for y in range(12):
+        for x in range(12):
             viewTier = []
-            for x in range(12):
+            for y in range(12):
                 if (x + y) % 2 == 0:
                     aLabel = Label(self.main_Frame, bd=2, relief="solid", image=self.empty_black)
                 else:
                     aLabel = Label(self.main_Frame, bd=2, relief="solid", image=self.empty_white)
-                    aLabel.bind("<Button-3>", lambda event, line=y+1, column=x+1: self.click_casa_branca(event, 0, line, column))
-                    aLabel.bind("<Button-1>", lambda event, line=y+1, column=x+1: self.click_casa_branca(event, 1, line, column))
+                    aLabel.bind("<Button-3>", lambda event, line=x, column=y: self.click_casa_branca(event, 0, line, column))
+                    aLabel.bind("<Button-1>", lambda event, line=x, column=y: self.click_casa_branca(event, 1, line, column))
                 aLabel.grid(row=x , column=y)
                 viewTier.append(aLabel)
             boardView.append(viewTier)
 
         return boardView
     
+    def inicializar_imagem_decimal(self, decimal: int, cor: str):
+        match decimal:
+            case 0:
+                if cor == "vermelho":
+                    d0_v= Image.open("imagens/D0_V.png")
+                    l, h = d0_v.size
+                    nl = int(l * 0.7)
+                    nh = int(h * 0.7)
+                    d0_v = d0_v.resize((nl, nh))
+                    self.D0_vermelho = ImageTk.PhotoImage(d0_v)
+                else:
+                    d0_A= Image.open("imagens/D0_A.png")
+                    l, h = d0_A.size
+                    nl = int(l * 0.7)
+                    nh = int(h * 0.7)
+                    d0_A = d0_A.resize((nl, nh))
+                    self.D0_azul = ImageTk.PhotoImage(d0_A)
+            case 1:
+                if cor == "vermelho":
+                    d1_v= Image.open("imagens/D1_V.png")
+                    l, h = d1_v.size
+                    nl = int(l * 0.7)
+                    nh = int(h * 0.7)
+                    d1_v = d1_v.resize((nl, nh))
+                    self.D1_vermelho = ImageTk.PhotoImage(d1_v)
+                else:
+                    d1_A= Image.open("imagens/D1_A.png")
+                    l, h = d1_A.size
+                    nl = int(l * 0.7)
+                    nh = int(h * 0.7)
+                    d1_A = d1_A.resize((nl, nh))
+                    self.D1_azul = ImageTk.PhotoImage(d1_A)
+            case 2:
+                if cor == "vermelho":
+                    d2_v= Image.open("imagens/D2_V.png")
+                    l, h = d2_v.size
+                    nl = int(l * 0.7)
+                    nh = int(h * 0.7)
+                    d2_v = d2_v.resize((nl, nh))
+                    self.D2_vermelho = ImageTk.PhotoImage(d2_v)
+                else:
+                    d2_A= Image.open("imagens/D2_A.png")
+                    l, h = d2_A.size
+                    nl = int(l * 0.7)
+                    nh = int(h * 0.7)
+                    d2_A = d2_A.resize((nl, nh))
+                    self.D2_azul = ImageTk.PhotoImage(d2_A)
+            case 3:
+                if cor == "vermelho":
+                    d3_v= Image.open("imagens/D3_V.png")
+                    l, h = d3_v.size
+                    nl = int(l * 0.7)
+                    nh = int(h * 0.7)
+                    d3_v = d3_v.resize((nl, nh))
+                    self.D3_vermelho = ImageTk.PhotoImage(d3_v)
+                else:
+                    d3_A= Image.open("imagens/D3_A.png")
+                    l, h = d3_A.size
+                    nl = int(l * 0.7)
+                    nh = int(h * 0.7)
+                    d3_A = d3_A.resize((nl, nh))
+                    self.D3_azul = ImageTk.PhotoImage(d3_A)
+            case 4:
+                if cor == "vermelho":
+                    d4_v= Image.open("imagens/D4_V.png")
+                    l, h = d4_v.size
+                    nl = int(l * 0.7)
+                    nh = int(h * 0.7)
+                    d4_v = d4_v.resize((nl, nh))
+                    self.D4_vermelho = ImageTk.PhotoImage(d4_v)
+                else:
+                    d4_A= Image.open("imagens/D4_A.png")
+                    l, h = d4_A.size
+                    nl = int(l * 0.7)
+                    nh = int(h * 0.7)
+                    d4_A = d4_A.resize((nl, nh))
+                    self.D4_azul = ImageTk.PhotoImage(d4_A)
+            case 5:
+                if cor == "vermelho":
+                    d5_v= Image.open("imagens/D5_V.png")
+                    l, h = d5_v.size
+                    nl = int(l * 0.7)
+                    nh = int(h * 0.7)
+                    d5_v = d5_v.resize((nl, nh))
+                    self.D5_vermelho = ImageTk.PhotoImage(d5_v)
+                else:
+                    d5_A= Image.open("imagens/D5_A.png")
+                    l, h = d5_A.size
+                    nl = int(l * 0.7)
+                    nh = int(h * 0.7)
+                    d5_A = d5_A.resize((nl, nh))
+                    self.D5_azul = ImageTk.PhotoImage(d5_A)
+            case 6:
+                if cor == "vermelho":
+                    d6_v= Image.open("imagens/D6_V.png")
+                    l, h = d6_v.size
+                    nl = int(l * 0.7)
+                    nh = int(h * 0.7)
+                    d6_v = d6_v.resize((nl, nh))
+                    self.D6_vermelho = ImageTk.PhotoImage(d6_v)
+                else:
+                    d6_A= Image.open("imagens/D6_A.png")
+                    l, h = d6_A.size
+                    nl = int(l * 0.7)
+                    nh = int(h * 0.7)
+                    d6_A = d6_A.resize((nl, nh))
+                    self.D6_azul = ImageTk.PhotoImage(d6_A)
+            case 7:
+                if cor == "vermelho":
+                    d7_v= Image.open("imagens/D7_V.png")
+                    l, h = d7_v.size
+                    nl = int(l * 0.7)
+                    nh = int(h * 0.7)
+                    d7_v = d7_v.resize((nl, nh))
+                    self.D7_vermelho = ImageTk.PhotoImage(d7_v)
+                else:
+                    d7_A= Image.open("imagens/D7_A.png")
+                    l, h = d7_A.size
+                    nl = int(l * 0.7)
+                    nh = int(h * 0.7)
+                    d7_A = d7_A.resize((nl, nh))
+                    self.D7_azul = ImageTk.PhotoImage(d7_A)
+            case 8:
+                if cor == "vermelho":
+                    d8_v= Image.open("imagens/D8_V.png")
+                    l, h = d8_v.size
+                    nl = int(l * 0.7)
+                    nh = int(h * 0.7)
+                    d8_v = d8_v.resize((nl, nh))
+                    self.D8_vermelho = ImageTk.PhotoImage(d8_v)
+                else:
+                    d8_A= Image.open("imagens/D8_A.png")
+                    l, h = d8_A.size
+                    nl = int(l * 0.7)
+                    nh = int(h * 0.7)
+                    d8_A = d8_A.resize((nl, nh))
+                    self.D8_azul = ImageTk.PhotoImage(d8_A)
+            case 9:
+                if cor == "vermelho":
+                    d9_v= Image.open("imagens/D9_V.png")
+                    l, h = d9_v.size
+                    nl = int(l * 0.7)
+                    nh = int(h * 0.7)
+                    d9_v = d9_v.resize((nl, nh))
+                    self.D9_vermelho = ImageTk.PhotoImage(d9_v)
+                else:
+                    d9_A= Image.open("imagens/D9_A.png")
+                    l, h = d9_A.size
+                    nl = int(l * 0.7)
+                    nh = int(h * 0.7)
+                    d9_A = d9_A.resize((nl, nh))
+                    self.D9_azul = ImageTk.PhotoImage(d9_A)
 
 
     def configurar_dog(self):
@@ -209,26 +374,33 @@ class PlayerInterface(DogPlayerInterface):
         message = self.dog_server_interface.initialize(player_name, self)
         messagebox.showinfo(message=message)
 
-    # ----- Função botão ----
-    def enviar_jogada(self):
-        messagebox.showinfo("enviar jogada", "Você clicou em 'enviar jogada' !")
 
     # --- Funções clique mouse casas ----
     def click_casa_branca(self, event, digito, linha, coluna):
-        if self.jogador_da_vez == JogadorDaVez.LOCAL:
+        if self.jogador_da_vez == JogadorDaVez.LOCAL and self.estado_jogo == EstadoJogo.PARTIDA_EM_ANDAMENTO:
             if digito == 0:
                 self.left_click(linha, coluna)
+               # print("digito inserido = ", digito)
+                #print("posicao = ", linha, coluna)
             else:
                 self.right_click(linha, coluna)
 
     def right_click(self, linha, coluna):
-        self.jogo.inserir_digito(1, linha, coluna)
-        self.tabuleiro[linha-1][coluna-1].configure(image=self.zero_preto)
+        casa_antiga = self.jogo.inserir_digito(0, linha, coluna)
+        if casa_antiga:
+            if casa_antiga[0] != -1:
+                self.tabuleiro[casa_antiga[0]][casa_antiga[1]].configure(image=self.empty_white)
+            self.tabuleiro[linha][coluna].configure(image=self.zero_azul)
+            self.dados_jogada_atual = {"digito": 0, "linha": linha, "coluna": coluna}  
         #self.tabuleiro[linha % len(self.tabuleiro)][coluna % len(self.tabuleiro[0])] = 0
                 
     def left_click(self, linha, coluna):
-        self.jogo.inserir_digito(0, linha, coluna)
-        self.tabuleiro[linha-1][coluna-1].configure(image=self.um_preto)
+        casa_antiga = self.jogo.inserir_digito(1, linha, coluna)
+        if casa_antiga:
+            if casa_antiga[0] != -1:
+                self.tabuleiro[casa_antiga[0]][casa_antiga[1]].configure(image=self.empty_white)
+            self.tabuleiro[linha][coluna].configure(image=self.um_azul)
+            self.dados_jogada_atual = {"digito": 1, "linha": linha, "coluna": coluna} 
         #self.tabuleiro[linha % len(self.tabuleiro)][coluna % len(self.tabuleiro[0])] = 0
 
     # ------ Funções menu -----
@@ -263,13 +435,145 @@ class PlayerInterface(DogPlayerInterface):
     def novo_jogo(self):
         messagebox.showinfo("novo jogo", "Você clicou em 'novo jogo' !")
 
+    # ----- Funcoes set ,  get e atualização-----
+    def atualizar_mensagem_jogador_da_vez(self):
+        if self.jogador_da_vez == JogadorDaVez.LOCAL:
+            cor = "red"
+        else:
+            cor = "blue"
+        self.img_vez.put(cor, to=(0, 0, 30, 30))
+        self.linha_frame.update()
     def set_estado_jogo(self, estado: EstadoJogo):
         self.jogo.set_estado_jogo(estado)
+        self.estado_jogo = estado
 
     def set_jogador_da_vez(self, jogador: JogadorDaVez):
         self.jogador_da_vez = jogador
         self.jogo.set_jogador_da_vez(jogador)
 
+    def atualizar_tabuleiro(self, casas_modificadas: list[tuple[int, int, int]]):
+        # casas_modificadas = list[tuple(decimal: int, linha: int , coluna: int]]
+        for casa in casas_modificadas:
+            decimal = casa[0]
+            linha = casa[1]
+            coluna = casa[2]
+            #print("Decimal modificado = ", decimal)
+            self.atualizar_casa_preta(decimal, linha, coluna)
+
+    def atualizar_casa_preta(self, decimal, linha, coluna):
+        match decimal:
+            case 0:
+                if self.jogador_da_vez == JogadorDaVez.LOCAL:
+                    self.inicializar_imagem_decimal(decimal, "vermelho")
+                    print("Imagem decimal = ", self.D0_vermelho)
+                    self.tabuleiro[linha][coluna].configure(image=self.D0_vermelho)
+                else:
+                    self.inicializar_imagem_decimal(decimal, "azul")
+                    self.tabuleiro[linha][coluna].configure(image=self.D0_azul)
+            case 1:
+                if self.jogador_da_vez == JogadorDaVez.LOCAL:
+                    self.inicializar_imagem_decimal(decimal, "vermelho")
+                    self.tabuleiro[linha][coluna].configure(image=self.D1_vermelho)
+                else:
+                    self.inicializar_imagem_decimal(decimal, "azul")
+                    self.tabuleiro[linha][coluna].configure(image=self.D1_azul)
+            case 2:
+                if self.jogador_da_vez == JogadorDaVez.LOCAL:
+                    self.inicializar_imagem_decimal(decimal, "vermelho")
+                    self.tabuleiro[linha][coluna].configure(image=self.D2_vermelho)
+                else:
+                    self.inicializar_imagem_decimal(decimal, "azul")
+                    self.tabuleiro[linha][coluna].configure(image=self.D2_azul)
+            case 3:
+                if self.jogador_da_vez == JogadorDaVez.LOCAL:
+                    self.inicializar_imagem_decimal(decimal, "vermelho")
+                    self.tabuleiro[linha][coluna].configure(image=self.D3_vermelho)
+                else:
+                    self.inicializar_imagem_decimal(decimal, "azul")
+                    self.tabuleiro[linha][coluna].configure(image=self.D3_azul)
+            case 4:
+                if self.jogador_da_vez == JogadorDaVez.LOCAL:
+                    self.inicializar_imagem_decimal(decimal, "vermelho")
+                    self.tabuleiro[linha][coluna].configure(image=self.D4_vermelho)
+                else:
+                    self.inicializar_imagem_decimal(decimal, "azul")
+                    self.tabuleiro[linha][coluna].configure(image=self.D4_azul)
+            case 5:
+                if self.jogador_da_vez == JogadorDaVez.LOCAL:
+                    self.inicializar_imagem_decimal(decimal, "vermelho")
+                    self.tabuleiro[linha][coluna].configure(image=self.D5_vermelho)
+                else:
+                    self.inicializar_imagem_decimal(decimal, "azul")
+                    self.tabuleiro[linha][coluna].configure(image=self.D5_azul)
+            case 6:
+                if self.jogador_da_vez == JogadorDaVez.LOCAL:
+                    self.inicializar_imagem_decimal(decimal, "vermelho")
+                    self.tabuleiro[linha][coluna].configure(image=self.D6_vermelho)
+                else:
+                    self.inicializar_imagem_decimal(decimal, "azul")
+                    self.tabuleiro[linha][coluna].configure(image=self.D6_azul)
+            case 7:
+                if self.jogador_da_vez == JogadorDaVez.LOCAL:
+                    self.inicializar_imagem_decimal(decimal, "vermelho")
+                    self.tabuleiro[linha][coluna].configure(image=self.D7_vermelho)
+                else:
+                    self.inicializar_imagem_decimal(decimal, "azul")
+                    self.tabuleiro[linha][coluna].configure(image=self.D7_azul)
+            case 8:
+                if self.jogador_da_vez == JogadorDaVez.LOCAL:
+                    self.inicializar_imagem_decimal(decimal, "vermelho")
+                    self.tabuleiro[linha][coluna].configure(image=self.D8_vermelho)
+                else:
+                    self.inicializar_imagem_decimal(decimal, "azul")
+                    self.tabuleiro[linha][coluna].configure(image=self.D8_azul)
+            case 9:
+                if self.jogador_da_vez == JogadorDaVez.LOCAL:
+                    self.inicializar_imagem_decimal(decimal, "vermelho")
+                    self.tabuleiro[linha][coluna].configure(image=self.D9_vermelho)
+                else:
+                    self.inicializar_imagem_decimal(decimal, "azul")
+                    self.tabuleiro[linha][coluna].configure(image=self.D9_azul)
+    
+    def inserir_digito_recebido(self, digito: int, linha: int, coluna: int):
+        match digito:
+            case 0:
+                self.tabuleiro[linha][coluna].configure(image=self.zero_azul)
+            case 1:
+                self.tabuleiro[linha][coluna].configure(image=self.um_azul)
+
+   # ----- Função botão ----
+    def enviar_jogada(self):
+        messagebox.showinfo("enviar jogada", "Você clicou em 'enviar jogada' !")
+        if self.jogador_da_vez == JogadorDaVez.LOCAL:
+            if self.dados_jogada_atual:
+                # casas modificadas -> casas modificadas : 
+                # list[tuple(decimal: int, linha: int , coluna: int]]
+                # pontuacao_nova: int ; 
+                consequencias_jogada : dict = self.jogo.confirmar_jogada()
+                #print("Retorno de confirmar jogada = ", consequencias_jogada)
+                casas_modificadas: list[tuple[int, int, int]] = consequencias_jogada["casas_modificadas"]
+                self.atualizar_tabuleiro(casas_modificadas)
+
+                self.placar.update_player_score(0, consequencias_jogada["pontuacao_nova"])
+                self.jogador_da_vez = JogadorDaVez.REMOTO
+
+                self.set_estado_jogo(self.jogo.get_estado_jogo())
+                if self.estado_jogo == EstadoJogo.PARTIDA_FINALIZADA:
+                    self.vencedor = self.jogo.get_vecedor()
+                    messagebox.showinfo("Fim de jogo", f"O jogador {self.vencedor.value} venceu!")
+                    self.dados_jogada_atual["match_status"]= "finished"
+                else:
+                    self.atualizar_mensagem_jogador_da_vez()
+                    self.dados_jogada_atual["match_status"]= "next"
+                self.dog_server_interface.send_move(self.dados_jogada_atual)
+                
+            else:
+                messagebox.showinfo("Jogada inválida", "Você precisa selecionar uma casa para jogar!")
+        
+        elif self.jogador_da_vez == JogadorDaVez.REMOTO:
+            messagebox.showinfo("Jogada inválida", "Ainda não é a sua vez de jogar!")
+            return
+        
     # ----- Funções DOG ----
     def receive_start(self, start_status):
         messagebox.showinfo("iniciar jogo", "Você recebeu uma solicitação de inicio de jogo!' !")
@@ -281,6 +585,38 @@ class PlayerInterface(DogPlayerInterface):
         self.set_estado_jogo(EstadoJogo.PARTIDA_EM_ANDAMENTO)
         self.set_jogador_da_vez(JogadorDaVez.REMOTO)
         self.atualizar_mensagem_jogador_da_vez()
+
+    def receive_move(self, a_move: dict):
+        messagebox.showinfo("receber jogada", "Você recebeu uma jogada!' !")
+        digito = a_move["digito"]
+        linha = a_move["linha"]
+        coluna = a_move["coluna"]
+
+        self.inserir_digito_recebido(digito, linha, coluna)
+        consequencias_jogada = self.jogo.receber_jogada(digito, linha, coluna)
+
+        casas_modificadas = consequencias_jogada["casas_modificadas"]
+        self.atualizar_tabuleiro(casas_modificadas)
+
+        self.placar.update_player_score(1, consequencias_jogada["pontuacao_nova"])
+
+        estado_jogo = self.jogo.get_estado_jogo()
+        self.set_estado_jogo(estado_jogo)
+        if self.estado_jogo == EstadoJogo.PARTIDA_FINALIZADA:
+            self.vencedor = self.jogo.get_vecedor()
+            messagebox.showinfo("Fim de jogo", f"O jogador {self.vencedor.value} venceu!")
+        else:
+            self.atualizar_mensagem_jogador_da_vez()
+            self.set_jogador_da_vez(JogadorDaVez.LOCAL)
+
+            self.atualizar_mensagem_jogador_da_vez()
+
+    def receive_withdrawal_notification(self):
+        messagebox.showinfo("receber notificação de desistência", "O outro jogador desistiu!' !")
+        self.set_estado_jogo(EstadoJogo.PARTIDA_ABANDONADA)
+        self.vencedor = JogadorDaVez.LOCAL
+        messagebox.showinfo("Fim de jogo", f"O jogador {self.vencedor.value} venceu!")
+
 
 
 PlayerInterface()

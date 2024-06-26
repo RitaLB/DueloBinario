@@ -7,8 +7,8 @@ from enums import JogadorDaVez
 
 class DueloBinario():
     def __init__(self, nome_jogador_local: str, nome_jogador_remoto: str):
+        self.casa_antiga: tuple[int, int] = None
         self.digito_inserido: int = None
-        self.digito_foi_inserido: bool = False
         self.estado_jogo: EstadoJogo = EstadoJogo.INICIAL # VERIFICAR
         self.jogada_em_andamento: bool = None
         self.jogador_da_vez : JogadorDaVez = None
@@ -21,10 +21,42 @@ class DueloBinario():
         self.vencedor: str = None # str ou Jogador?
 
     def atualizar_pontuacao_jogador_da_vez(self, pontos: int):
-        self.jogador_da_vez.pontuacao = pontos
+        if self.jogador_da_vez == JogadorDaVez.LOCAL:
+            pontuacao_atual= self.jogador_local.get_pontuacao()
+        else:
+            pontuacao_atual = self.jogador_remoto.get_pontuacao()
+        
+        pontuacao_parcial = pontuacao_atual + pontos
+        while pontuacao_parcial >= 10:
+            unidades = pontuacao_parcial % 10
+            dezenas = (pontuacao_parcial - unidades) / 10
+            pontuacao_parcial = unidades + dezenas
 
-    def avaliar_consequencias_digito(self, linha_digito: int, coluna_digito: int):
-        pass
+        nova_pontuacao = pontuacao_parcial
+
+        if self.jogador_da_vez == JogadorDaVez.LOCAL:
+            self.jogador_local.set_pontuacao(nova_pontuacao)
+        else:
+            self.jogador_remoto.set_pontuacao(nova_pontuacao)
+
+    def avaliar_consequencias_digito(self, linha_digito: int, coluna_digito: int) ->dict:  # Retorno com dicionario. casas modificadas : list[tuple(decimal: int, linha: int , coluna: int]] pontuacao_nova: int
+        casas_modificadas = []
+        casas_pretas = self.Tabuleiro.achar_casas_pretas(linha_digito, coluna_digito)
+        #print("casas pretas encontradas = ", casas_pretas)
+        for casa in casas_pretas:
+            pontos = 0
+            grupo_completo = self.Tabuleiro.examinar_casas_brancas(casa[0], casa[1])
+            if grupo_completo:
+                #print("grupo completo = ", grupo_completo)
+                decimal = self.Tabuleiro.calcular_decimal(casa[0], casa[1])
+                cor = self.get_cor_jogador_da_vez()
+                self.Tabuleiro.inserir_decimal(casa[0], casa[1], decimal, cor)
+                pontos += self.calcular_pontos(decimal)
+                casas_modificadas.append((decimal, casa[0], casa[1]))
+            
+            self.atualizar_pontuacao_jogador_da_vez(pontos)
+        
+        return {"casas_modificadas": casas_modificadas, "pontuacao_nova": self.get_pontuacao_jogador_da_vez()}
 
     def avaliar_fim_partida(self):
         if (self.Tabuleiro.verificar_tabuleiro_completo()):
@@ -46,18 +78,21 @@ class DueloBinario():
     def calcular_pontos(self, decimal: int) -> int: # Verificar se tem retorno msm
         match decimal:
             case 0:
-                pontuacao_jogador_da_vez = self.jogador_da_vez.get_pontuacao()
+                if self.jogador_da_vez == JogadorDaVez.LOCAL:
+                    pontuacao_jogador_da_vez = self.jogador_local.get_pontuacao()
+                else:
+                    pontuacao_jogador_da_vez = self.jogador_remoto.get_pontuacao()
                 pontos = -1 * pontuacao_jogador_da_vez
                 return pontos
             case 1:
-                numero_1s = self.contar_1s()
+                numero_1s = self.Tabuleiro.contar_1s()
                 if ((numero_1s % 3) == 0):
                     pontos = 1
                 else:
                     pontos = 0
                 return pontos
             case 2:
-                numero_2s = self.contar_2s()
+                numero_2s = self.Tabuleiro.contar_2s()
                 if ((numero_2s % 3) == 0):
                     pontos = 2
                 else: 
@@ -77,11 +112,27 @@ class DueloBinario():
         return pontos
         
         
-    def confirmar_jogada(self):
-        pass
+    def confirmar_jogada(self) -> dict: # Retorno com dicionario. casas modificadas : list[tuple(decimal: int, linha: int , coluna: int]] pontuacao_nova: int
+        self.Tabuleiro.confirmar_jogada()
+        consequencias_jogada = self.avaliar_consequencias_digito(self.posicao_digito_inserido[0], self.posicao_digito_inserido[1])
+        print("consequencias_jogada dentro de confirmar jogada DB = ", consequencias_jogada)
+        self.set_jogador_da_vez(JogadorDaVez.REMOTO)
+        self.casa_antiga = None
+        self.digito_inserido = None
+        self.posicao_digito_inserido = None
+        partida_finalizada = self.avaliar_fim_partida()
+
+        if partida_finalizada:
+            self.estado_jogo = EstadoJogo.PARTIDA_FINALIZADA
+
+        return consequencias_jogada
+    
 
     def get_cor_jogador_da_vez(self) -> str:
-        pass
+        if self.jogador_da_vez == JogadorDaVez.LOCAL:
+            return "red"
+        else:
+            return "blue"
 
     def get_dados_jogada(self) -> tuple[int, int, int]: # digito, coluna, linha
         return tuple()
@@ -92,20 +143,36 @@ class DueloBinario():
     def get_estado_jogo(self) -> EstadoJogo:
         return self.estado_jogo
 
+    def get_pontuacao_jogador_da_vez(self) -> int:
+        if self.jogador_da_vez == JogadorDaVez.LOCAL:
+            return self.jogador_local.get_pontuacao()
+        else:
+            return self.jogador_remoto.get_pontuacao()
+        
     def get_vecedor(self) -> JogadorDaVez:
         return self.vencedor
 
-    def inserir_digito(self, digito: int, linha: int, coluna: int) :
-        self.digito_foi_inserido = self.Tabuleiro.inserir_digito(digito, linha, coluna)
-        if self.digito_foi_inserido:
+    def inserir_digito(self, digito: int, linha: int, coluna: int) -> tuple[int, int]:
+        self.casa_antiga = self.Tabuleiro.inserir_digito(digito, linha, coluna)
+        
+        if self.casa_antiga is not None:
             self.digito_inserido = digito
             self.posicao_digito_inserido = (linha, coluna)
+
+        return self.casa_antiga
 
     def obter_nomes_jogadores(self) -> tuple[str, str]: # inserir tipo de retorno no diagrama
         pass
 
-    def receber_jogada(self, digito: int, linha: int, coluna: int):
-        pass
+    def receber_jogada(self, digito: int, linha: int, coluna: int) -> dict:
+        self.Tabuleiro.inserir_digito_recebido(digito, linha, coluna)
+        consequencias_jogada = self.avaliar_consequencias_digito(linha, coluna)
+        
+        partida_finalizada = self.avaliar_fim_partida()
+        if partida_finalizada:
+            self.estado_jogo = EstadoJogo.PARTIDA_FINALIZADA
+
+        return consequencias_jogada
 
     def reiniciar_placar(self): # Verificar se é usado mesmo ou se não é responsa da interface
         pass
@@ -114,7 +181,7 @@ class DueloBinario():
         pass
 
     def set_estado_jogo(self, estado: EstadoJogo):
-        pass
+        self.estado_jogo = estado
 
     def set_digito_foi_inserido(self, valor: bool):
         pass

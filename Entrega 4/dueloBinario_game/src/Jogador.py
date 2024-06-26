@@ -13,4 +13,10 @@ class Jogador():
     def set_nome(self, nome: str):
         self.nome = nome
 
+    def get_pontuacao(self) -> int:
+        return self.pontuacao
+    
+    def set_pontuacao(self, pontuacao: int):
+        self.pontuacao = pontuacao
+
     

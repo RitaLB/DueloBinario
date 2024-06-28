@@ -27,6 +27,9 @@ class DueloBinario():
             pontuacao_atual = self.jogador_remoto.get_pontuacao()
         
         pontuacao_parcial = pontuacao_atual + pontos
+        if pontuacao_parcial < 0:
+            pontuacao_parcial = 0
+
         while pontuacao_parcial >= 10:
             unidades = pontuacao_parcial % 10
             dezenas = (pontuacao_parcial - unidades) / 10
@@ -85,16 +88,17 @@ class DueloBinario():
                 pontos = -1 * pontuacao_jogador_da_vez
                 return pontos
             case 1:
-                numero_1s = self.Tabuleiro.contar_1s()
-                if ((numero_1s % 3) == 0):
-                    pontos = 1
+                numero_1s = self.Tabuleiro.contar_1s(self.get_cor_jogador_da_vez())
+                print("numero_1s = ", numero_1s)
+                if ((numero_1s % 3) == 0) and (numero_1s != 0):
+                    pontos = 9
                 else:
                     pontos = 0
                 return pontos
             case 2:
-                numero_2s = self.Tabuleiro.contar_2s()
-                if ((numero_2s % 3) == 0):
-                    pontos = 2
+                numero_2s = self.Tabuleiro.contar_2s(self.get_cor_jogador_da_vez())
+                if ((numero_2s % 3) == 0) and (numero_2s != 0):
+                    pontos = 6
                 else: 
                     pontos = 0
                 return pontos
@@ -105,10 +109,10 @@ class DueloBinario():
                 pontos = 3
                 return pontos
         if ((decimal % 2) == 1):
-            pontos = -1
+            pontos = 1
             return pontos
         else:
-            pontos = -2
+            pontos = -1
         return pontos
         
         

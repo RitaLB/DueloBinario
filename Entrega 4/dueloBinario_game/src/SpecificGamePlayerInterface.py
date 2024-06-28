@@ -27,13 +27,13 @@ class PlayerInterface(DogPlayerInterface):
         self.menu_bar = Menu(self.main_Window) 
         self.menu_file : Menu = self.criar_menu() # verificar necessidade
         self.vencedor: JogadorDaVez = None
-        self.placar: Placar = self.criar_pacar()
         self.mensagem_jogador_da_vez : Label = self.criar_mensagem_jogador_da_vez() # $
         self.botao_enviar_jogada: Button = self.criar_botao_enviar_jogada() # $
         self.start_status = None
         self.jogada_atual : dict = None
-
-        # FALTA ADICIONAR IMAGEM DE REGRA DE ORDEM DO NÚMERO
+        self.inicializar_imagem_decimais()
+        #self.imagens_decimais_vermelhos = self.alocar_decimais_vermelhos()
+        #self.imagens_decimais_azuis = self.alocar_decimais_azuis()
 
         # Configurações DOG
         self.configurar_dog()
@@ -42,6 +42,78 @@ class PlayerInterface(DogPlayerInterface):
 
 
     # ----- Funções inicialização -----
+    def alocar_decimais_vermelhos(self) -> list[ImageTk.PhotoImage]:
+        deciamis = []
+        self.D0_vermelho = None
+        self.D1_vermelho = None
+        self.D2_vermelho = None
+        self.D3_vermelho = None
+        self.D4_vermelho = None
+        self.D5_vermelho = None
+        self.D6_vermelho = None
+        self.D7_vermelho = None
+        self.D8_vermelho = None
+        self.D9_vermelho = None
+        deciamis.append(self.D0_vermelho)
+        deciamis.append(self.D1_vermelho)
+        deciamis.append(self.D2_vermelho)
+        deciamis.append(self.D3_vermelho)
+        deciamis.append(self.D4_vermelho)
+        deciamis.append(self.D5_vermelho)
+        deciamis.append(self.D6_vermelho)
+        deciamis.append(self.D7_vermelho)
+        deciamis.append(self.D8_vermelho)
+        deciamis.append(self.D9_vermelho)
+             
+
+        return deciamis
+    
+    def alocar_decimais_vermelhos(self) -> list[ImageTk.PhotoImage]:
+        deciamis = []
+        self.D0_azul = None
+        self.D0_vermelho = None
+        self.D1_azul = None
+        self.D1_vermelho = None
+        self.D2_azul = None
+        self.D2_vermelho = None
+        self.D3_azul = None
+        self.D3_vermelho = None
+        self.D4_azul = None
+        self.D4_vermelho = None
+        self.D5_azul = None
+        self.D5_vermelho = None
+        self.D6_azul = None
+        self.D6_vermelho = None
+        self.D7_azul = None
+        self.D7_vermelho = None
+        self.D8_azul = None
+        self.D8_vermelho = None
+        self.D9_azul = None
+        self.D9_vermelho = None
+        deciamis.append(self.D0_azul)
+        deciamis.append(self.D0_vermelho)
+        deciamis.append(self.D1_azul)
+        deciamis.append(self.D1_vermelho)
+        deciamis.append(self.D2_azul)
+        deciamis.append(self.D2_vermelho)
+        deciamis.append(self.D3_azul)
+        deciamis.append(self.D3_vermelho)
+        deciamis.append(self.D4_azul)
+        deciamis.append(self.D4_vermelho)
+        deciamis.append(self.D5_azul)
+        deciamis.append(self.D5_vermelho)
+        deciamis.append(self.D6_azul)
+        deciamis.append(self.D6_vermelho)
+        deciamis.append(self.D7_azul)
+        deciamis.append(self.D7_vermelho)
+        deciamis.append(self.D8_azul)
+        deciamis.append(self.D8_vermelho)
+        deciamis.append(self.D9_azul)
+        deciamis.append(self.D9_vermelho)
+                
+
+        return deciamis
+    
 
     def criar_main_window(self) -> tk.Tk:
         main_Window = tk.Tk()
@@ -73,33 +145,36 @@ class PlayerInterface(DogPlayerInterface):
         # Cria um objeto PhotoImage a partir da imagem redimensionada
         self.regras_image = ImageTk.PhotoImage(regras_image)
         #self.regras_image = PhotoImage(file="imagens/regras.png")
-        self.regras_frame = Frame(main_Window, padx=4,  pady=1, bg="white")
+        self.regras_frame = Frame(main_Window, padx=4,  pady=4, bg="white")
         self.regras_frame.grid(row=1, column=2)
         self.label_regras = Label(self.regras_frame, image = self.regras_image)
-        self.label_regras.grid(row=2, column= 0, columnspan=3)
+        self.label_regras.grid(row=2, column= 0)
+
+        #Placar e ordem digitos
+       
+        self.placar_e_ordem_frame = Frame(main_Window, padx=7,  pady=1, bg="white")
+        self.placar_e_ordem_frame.grid(row=1, column=0)
+            
+            #placar
+        self.placar_frame = Frame(self.placar_e_ordem_frame, padx=4,  pady=4, bg="white", borderwidth=1, relief="solid")
+        self.placar_frame.grid(row=0, column=0)
+        self.placar = Placar(self.placar_frame, "Player 1", "Player 2", 0, 0, "red", "blue")
+
+            #Regra de ordem dos dígitos
+        img_ordem = Image.open("imagens/ordem.png")
+        l, h = img_ordem.size
+        nl = int(l * 0.8)
+        nh = int(h * 0.8)
+        img_ordem = img_ordem.resize((nl, nh))
+        self.img_ordem = ImageTk.PhotoImage(img_ordem)
+        self.ordem_frame = Frame(self.placar_e_ordem_frame, padx=4,  pady=4, bg="white")
+        self.ordem_frame.grid(row=1, column=0)
+        self.label_ordem = Label(self.ordem_frame, image = self.img_ordem)
+        self.label_ordem.grid(row=2, column= 0)
+
 
         return main_Window
 
-    '''
-    def criar_mensagem_jogador_da_vez(self) -> Label:
-        #Terceira linha frame
-        self.linha_frame = Frame(self.main_Window, padx=4,  pady=1, bg="white")
-        self.linha_frame.grid(row=2, column=1)
-
-        #"Está na vez de"
-        vez_image = Image.open("imagens/vez.png")
-        l, h = vez_image.size
-        nl = int(l * 0.7)
-        nh = int(h * 0.7)
-        vez_image = vez_image.resize((nl, nh))
-        # Cria um objeto PhotoImage a partir da imagem redimensionada
-        self.vez_image = ImageTk.PhotoImage(vez_image)
-        #self.vez_image = PhotoImage(file="imagens/vez.png"))
-        label_vez = Label(self.linha_frame, image = self.vez_image)
-        label_vez.grid(row=0, column= 0)
-
-        return label_vez
-    '''
     def criar_botao_enviar_jogada(self) -> Button:
         #Botão enviar jogada
         self.enviar_jogada_button = Button(self.linha_frame , text = "Enviar jogada", command= self.enviar_jogada )
@@ -135,13 +210,7 @@ class PlayerInterface(DogPlayerInterface):
 
         return menu_file
 
-    def criar_pacar(self) -> Placar:
-        self.placar_frame = Frame(self.main_Window, padx=4,  pady=1, bg="white", borderwidth=1, relief="solid")
-        self.placar_frame.grid(row=1, column=0)
-        placar = Placar(self.placar_frame, "Player 1", "Player 2", 0, 0, "red", "blue")
-        placar.pack()
 
-        return placar
     
     def criar_tabuleiro(self) -> list[Label]:
 
@@ -209,160 +278,147 @@ class PlayerInterface(DogPlayerInterface):
             boardView.append(viewTier)
 
         return boardView
-    
-    def inicializar_imagem_decimal(self, decimal: int, cor: str):
-        match decimal:
-            case 0:
-                if cor == "vermelho":
-                    d0_v= Image.open("imagens/D0_V.png")
-                    l, h = d0_v.size
-                    nl = int(l * 0.7)
-                    nh = int(h * 0.7)
-                    d0_v = d0_v.resize((nl, nh))
-                    self.D0_vermelho = ImageTk.PhotoImage(d0_v)
-                else:
-                    d0_A= Image.open("imagens/D0_A.png")
-                    l, h = d0_A.size
-                    nl = int(l * 0.7)
-                    nh = int(h * 0.7)
-                    d0_A = d0_A.resize((nl, nh))
-                    self.D0_azul = ImageTk.PhotoImage(d0_A)
-            case 1:
-                if cor == "vermelho":
-                    d1_v= Image.open("imagens/D1_V.png")
-                    l, h = d1_v.size
-                    nl = int(l * 0.7)
-                    nh = int(h * 0.7)
-                    d1_v = d1_v.resize((nl, nh))
-                    self.D1_vermelho = ImageTk.PhotoImage(d1_v)
-                else:
-                    d1_A= Image.open("imagens/D1_A.png")
-                    l, h = d1_A.size
-                    nl = int(l * 0.7)
-                    nh = int(h * 0.7)
-                    d1_A = d1_A.resize((nl, nh))
-                    self.D1_azul = ImageTk.PhotoImage(d1_A)
-            case 2:
-                if cor == "vermelho":
-                    d2_v= Image.open("imagens/D2_V.png")
-                    l, h = d2_v.size
-                    nl = int(l * 0.7)
-                    nh = int(h * 0.7)
-                    d2_v = d2_v.resize((nl, nh))
-                    self.D2_vermelho = ImageTk.PhotoImage(d2_v)
-                else:
-                    d2_A= Image.open("imagens/D2_A.png")
-                    l, h = d2_A.size
-                    nl = int(l * 0.7)
-                    nh = int(h * 0.7)
-                    d2_A = d2_A.resize((nl, nh))
-                    self.D2_azul = ImageTk.PhotoImage(d2_A)
-            case 3:
-                if cor == "vermelho":
-                    d3_v= Image.open("imagens/D3_V.png")
-                    l, h = d3_v.size
-                    nl = int(l * 0.7)
-                    nh = int(h * 0.7)
-                    d3_v = d3_v.resize((nl, nh))
-                    self.D3_vermelho = ImageTk.PhotoImage(d3_v)
-                else:
-                    d3_A= Image.open("imagens/D3_A.png")
-                    l, h = d3_A.size
-                    nl = int(l * 0.7)
-                    nh = int(h * 0.7)
-                    d3_A = d3_A.resize((nl, nh))
-                    self.D3_azul = ImageTk.PhotoImage(d3_A)
-            case 4:
-                if cor == "vermelho":
-                    d4_v= Image.open("imagens/D4_V.png")
-                    l, h = d4_v.size
-                    nl = int(l * 0.7)
-                    nh = int(h * 0.7)
-                    d4_v = d4_v.resize((nl, nh))
-                    self.D4_vermelho = ImageTk.PhotoImage(d4_v)
-                else:
-                    d4_A= Image.open("imagens/D4_A.png")
-                    l, h = d4_A.size
-                    nl = int(l * 0.7)
-                    nh = int(h * 0.7)
-                    d4_A = d4_A.resize((nl, nh))
-                    self.D4_azul = ImageTk.PhotoImage(d4_A)
-            case 5:
-                if cor == "vermelho":
-                    d5_v= Image.open("imagens/D5_V.png")
-                    l, h = d5_v.size
-                    nl = int(l * 0.7)
-                    nh = int(h * 0.7)
-                    d5_v = d5_v.resize((nl, nh))
-                    self.D5_vermelho = ImageTk.PhotoImage(d5_v)
-                else:
-                    d5_A= Image.open("imagens/D5_A.png")
-                    l, h = d5_A.size
-                    nl = int(l * 0.7)
-                    nh = int(h * 0.7)
-                    d5_A = d5_A.resize((nl, nh))
-                    self.D5_azul = ImageTk.PhotoImage(d5_A)
-            case 6:
-                if cor == "vermelho":
-                    d6_v= Image.open("imagens/D6_V.png")
-                    l, h = d6_v.size
-                    nl = int(l * 0.7)
-                    nh = int(h * 0.7)
-                    d6_v = d6_v.resize((nl, nh))
-                    self.D6_vermelho = ImageTk.PhotoImage(d6_v)
-                else:
-                    d6_A= Image.open("imagens/D6_A.png")
-                    l, h = d6_A.size
-                    nl = int(l * 0.7)
-                    nh = int(h * 0.7)
-                    d6_A = d6_A.resize((nl, nh))
-                    self.D6_azul = ImageTk.PhotoImage(d6_A)
-            case 7:
-                if cor == "vermelho":
-                    d7_v= Image.open("imagens/D7_V.png")
-                    l, h = d7_v.size
-                    nl = int(l * 0.7)
-                    nh = int(h * 0.7)
-                    d7_v = d7_v.resize((nl, nh))
-                    self.D7_vermelho = ImageTk.PhotoImage(d7_v)
-                else:
-                    d7_A= Image.open("imagens/D7_A.png")
-                    l, h = d7_A.size
-                    nl = int(l * 0.7)
-                    nh = int(h * 0.7)
-                    d7_A = d7_A.resize((nl, nh))
-                    self.D7_azul = ImageTk.PhotoImage(d7_A)
-            case 8:
-                if cor == "vermelho":
-                    d8_v= Image.open("imagens/D8_V.png")
-                    l, h = d8_v.size
-                    nl = int(l * 0.7)
-                    nh = int(h * 0.7)
-                    d8_v = d8_v.resize((nl, nh))
-                    self.D8_vermelho = ImageTk.PhotoImage(d8_v)
-                else:
-                    d8_A= Image.open("imagens/D8_A.png")
-                    l, h = d8_A.size
-                    nl = int(l * 0.7)
-                    nh = int(h * 0.7)
-                    d8_A = d8_A.resize((nl, nh))
-                    self.D8_azul = ImageTk.PhotoImage(d8_A)
-            case 9:
-                if cor == "vermelho":
-                    d9_v= Image.open("imagens/D9_V.png")
-                    l, h = d9_v.size
-                    nl = int(l * 0.7)
-                    nh = int(h * 0.7)
-                    d9_v = d9_v.resize((nl, nh))
-                    self.D9_vermelho = ImageTk.PhotoImage(d9_v)
-                else:
-                    d9_A= Image.open("imagens/D9_A.png")
-                    l, h = d9_A.size
-                    nl = int(l * 0.7)
-                    nh = int(h * 0.7)
-                    d9_A = d9_A.resize((nl, nh))
-                    self.D9_azul = ImageTk.PhotoImage(d9_A)
 
+    def inicializar_imagem_decimais(self):
+        d0_v= Image.open("imagens/D0_V.png")
+        l, h = d0_v.size
+        nl = int(l * 0.7)
+        nh = int(h * 0.7)
+        d0_v = d0_v.resize((nl, nh))
+        self.D0_vermelho = ImageTk.PhotoImage(d0_v)
+
+        d0_A= Image.open("imagens/D0_A.png")
+        l, h = d0_A.size
+        nl = int(l * 0.7)
+        nh = int(h * 0.7)
+        d0_A = d0_A.resize((nl, nh))
+        self.D0_azul = ImageTk.PhotoImage(d0_A)
+
+        d1_v= Image.open("imagens/D1_V.png")
+        l, h = d1_v.size
+        nl = int(l * 0.7)
+        nh = int(h * 0.7)
+        d1_v = d1_v.resize((nl, nh))
+        self.D1_vermelho = ImageTk.PhotoImage(d1_v)
+
+        d1_A= Image.open("imagens/D1_A.png")
+        l, h = d1_A.size
+        nl = int(l * 0.7)
+        nh = int(h * 0.7)
+        d1_A = d1_A.resize((nl, nh))
+        self.D1_azul = ImageTk.PhotoImage(d1_A)
+
+        d2_v= Image.open("imagens/D2_V.png")
+        l, h = d2_v.size
+        nl = int(l * 0.7)
+        nh = int(h * 0.7)
+        d2_v = d2_v.resize((nl, nh))
+        self.D2_vermelho = ImageTk.PhotoImage(d2_v)
+
+        d2_A= Image.open("imagens/D2_A.png")
+        l, h = d2_A.size
+        nl = int(l * 0.7)
+        nh = int(h * 0.7)
+        d2_A = d2_A.resize((nl, nh))
+        self.D2_azul = ImageTk.PhotoImage(d2_A)
+
+        d3_v= Image.open("imagens/D3_V.png")
+        l, h = d3_v.size
+        nl = int(l * 0.7)
+        nh = int(h * 0.7)
+        d3_v = d3_v.resize((nl, nh))
+        self.D3_vermelho = ImageTk.PhotoImage(d3_v)
+
+        d3_A= Image.open("imagens/D3_A.png")
+        l, h = d3_A.size
+        nl = int(l * 0.7)
+        nh = int(h * 0.7)
+        d3_A = d3_A.resize((nl, nh))
+        self.D3_azul = ImageTk.PhotoImage(d3_A)
+
+        d4_v= Image.open("imagens/D4_V.png")
+        l, h = d4_v.size
+        nl = int(l * 0.7)
+        nh = int(h * 0.7)
+        d4_v = d4_v.resize((nl, nh))
+        self.D4_vermelho = ImageTk.PhotoImage(d4_v)
+
+        d4_A= Image.open("imagens/D4_A.png")
+        l, h = d4_A.size
+        nl = int(l * 0.7)
+        nh = int(h * 0.7)
+        d4_A = d4_A.resize((nl, nh))
+        self.D4_azul = ImageTk.PhotoImage(d4_A)
+
+        d5_v= Image.open("imagens/D5_V.png")
+        l, h = d5_v.size
+        nl = int(l * 0.7)
+        nh = int(h * 0.7)
+        d5_v = d5_v.resize((nl, nh))
+        self.D5_vermelho = ImageTk.PhotoImage(d5_v)
+
+        d5_A= Image.open("imagens/D5_A.png")
+        l, h = d5_A.size
+        nl = int(l * 0.7)
+        nh = int(h * 0.7)
+        d5_A = d5_A.resize((nl, nh))
+        self.D5_azul = ImageTk.PhotoImage(d5_A)
+
+        d6_v= Image.open("imagens/D6_V.png")
+        l, h = d6_v.size
+        nl = int(l * 0.7)
+        nh = int(h * 0.7)
+        d6_v = d6_v.resize((nl, nh))
+        self.D6_vermelho = ImageTk.PhotoImage(d6_v)
+
+        d6_A= Image.open("imagens/D6_A.png")
+        l, h = d6_A.size
+        nl = int(l * 0.7)
+        nh = int(h * 0.7)
+        d6_A = d6_A.resize((nl, nh))
+        self.D6_azul = ImageTk.PhotoImage(d6_A)
+
+        d7_v= Image.open("imagens/D7_V.png")
+        l, h = d7_v.size
+        nl = int(l * 0.7)
+        nh = int(h * 0.7)
+        d7_v = d7_v.resize((nl, nh))
+        self.D7_vermelho = ImageTk.PhotoImage(d7_v)
+
+        d7_A= Image.open("imagens/D7_A.png")
+        l, h = d7_A.size
+        nl = int(l * 0.7)
+        nh = int(h * 0.7)
+        d7_A = d7_A.resize((nl, nh))
+        self.D7_azul = ImageTk.PhotoImage(d7_A)
+
+        d8_v= Image.open("imagens/D8_V.png")
+        l, h = d8_v.size
+        nl = int(l * 0.7)
+        nh = int(h * 0.7)
+        d8_v = d8_v.resize((nl, nh))
+        self.D8_vermelho = ImageTk.PhotoImage(d8_v)
+
+        d8_A= Image.open("imagens/D8_A.png")
+        l, h = d8_A.size
+        nl = int(l * 0.7)
+        nh = int(h * 0.7)
+        d8_A = d8_A.resize((nl, nh))
+        self.D8_azul = ImageTk.PhotoImage(d8_A)
+
+        d9_v= Image.open("imagens/D9_V.png")
+        l, h = d9_v.size
+        nl = int(l * 0.7)
+        nh = int(h * 0.7)
+        d9_v = d9_v.resize((nl, nh))
+        self.D9_vermelho = ImageTk.PhotoImage(d9_v)
+
+        d9_A= Image.open("imagens/D9_A.png")
+        l, h = d9_A.size
+        nl = int(l * 0.7)
+        nh = int(h * 0.7)
+        d9_A = d9_A.resize((nl, nh))
+        self.D9_azul = ImageTk.PhotoImage(d9_A)
 
     def configurar_dog(self):
         player_name = simpledialog.askstring(title="Player identification", prompt="Qual o seu nome?")
@@ -459,81 +515,60 @@ class PlayerInterface(DogPlayerInterface):
             coluna = casa[2]
             #print("Decimal modificado = ", decimal)
             self.atualizar_casa_preta(decimal, linha, coluna)
-
+          
     def atualizar_casa_preta(self, decimal, linha, coluna):
         match decimal:
             case 0:
                 if self.jogador_da_vez == JogadorDaVez.LOCAL:
-                    self.inicializar_imagem_decimal(decimal, "vermelho")
-                    print("Imagem decimal = ", self.D0_vermelho)
                     self.tabuleiro[linha][coluna].configure(image=self.D0_vermelho)
                 else:
-                    self.inicializar_imagem_decimal(decimal, "azul")
                     self.tabuleiro[linha][coluna].configure(image=self.D0_azul)
             case 1:
                 if self.jogador_da_vez == JogadorDaVez.LOCAL:
-                    self.inicializar_imagem_decimal(decimal, "vermelho")
                     self.tabuleiro[linha][coluna].configure(image=self.D1_vermelho)
                 else:
-                    self.inicializar_imagem_decimal(decimal, "azul")
                     self.tabuleiro[linha][coluna].configure(image=self.D1_azul)
             case 2:
                 if self.jogador_da_vez == JogadorDaVez.LOCAL:
-                    self.inicializar_imagem_decimal(decimal, "vermelho")
                     self.tabuleiro[linha][coluna].configure(image=self.D2_vermelho)
                 else:
-                    self.inicializar_imagem_decimal(decimal, "azul")
                     self.tabuleiro[linha][coluna].configure(image=self.D2_azul)
             case 3:
                 if self.jogador_da_vez == JogadorDaVez.LOCAL:
-                    self.inicializar_imagem_decimal(decimal, "vermelho")
                     self.tabuleiro[linha][coluna].configure(image=self.D3_vermelho)
                 else:
-                    self.inicializar_imagem_decimal(decimal, "azul")
                     self.tabuleiro[linha][coluna].configure(image=self.D3_azul)
             case 4:
                 if self.jogador_da_vez == JogadorDaVez.LOCAL:
-                    self.inicializar_imagem_decimal(decimal, "vermelho")
                     self.tabuleiro[linha][coluna].configure(image=self.D4_vermelho)
                 else:
-                    self.inicializar_imagem_decimal(decimal, "azul")
                     self.tabuleiro[linha][coluna].configure(image=self.D4_azul)
             case 5:
                 if self.jogador_da_vez == JogadorDaVez.LOCAL:
-                    self.inicializar_imagem_decimal(decimal, "vermelho")
                     self.tabuleiro[linha][coluna].configure(image=self.D5_vermelho)
                 else:
-                    self.inicializar_imagem_decimal(decimal, "azul")
                     self.tabuleiro[linha][coluna].configure(image=self.D5_azul)
             case 6:
                 if self.jogador_da_vez == JogadorDaVez.LOCAL:
-                    self.inicializar_imagem_decimal(decimal, "vermelho")
                     self.tabuleiro[linha][coluna].configure(image=self.D6_vermelho)
                 else:
-                    self.inicializar_imagem_decimal(decimal, "azul")
                     self.tabuleiro[linha][coluna].configure(image=self.D6_azul)
             case 7:
                 if self.jogador_da_vez == JogadorDaVez.LOCAL:
-                    self.inicializar_imagem_decimal(decimal, "vermelho")
                     self.tabuleiro[linha][coluna].configure(image=self.D7_vermelho)
                 else:
-                    self.inicializar_imagem_decimal(decimal, "azul")
                     self.tabuleiro[linha][coluna].configure(image=self.D7_azul)
             case 8:
                 if self.jogador_da_vez == JogadorDaVez.LOCAL:
-                    self.inicializar_imagem_decimal(decimal, "vermelho")
                     self.tabuleiro[linha][coluna].configure(image=self.D8_vermelho)
                 else:
-                    self.inicializar_imagem_decimal(decimal, "azul")
                     self.tabuleiro[linha][coluna].configure(image=self.D8_azul)
             case 9:
                 if self.jogador_da_vez == JogadorDaVez.LOCAL:
-                    self.inicializar_imagem_decimal(decimal, "vermelho")
                     self.tabuleiro[linha][coluna].configure(image=self.D9_vermelho)
                 else:
-                    self.inicializar_imagem_decimal(decimal, "azul")
                     self.tabuleiro[linha][coluna].configure(image=self.D9_azul)
-    
+
     def inserir_digito_recebido(self, digito: int, linha: int, coluna: int):
         match digito:
             case 0:

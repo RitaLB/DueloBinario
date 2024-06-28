@@ -76,13 +76,21 @@ class Tabuleiro():
         self.tabuleiro[linha][coluna].desabilitar_mudanca()
         self.reset_casa_em_modificacao()
 
-    def contar_2s(self) -> int:
-        #FALTA FAZER
-        return 3
+    def contar_2s(self, cor) -> int:
+        contagem = 0
+        for linha in self.tabuleiro:
+            for posicao in linha:
+                if (posicao.decimal == 2) and (posicao.cor == cor):
+                    contagem += 1
+        return contagem
 
-    def contar_1s(self) -> int:
-        #FALTA FAZER
-        return 3
+    def contar_1s(self, cor) -> int:
+        contagem = 0
+        for linha in self.tabuleiro:
+            for posicao in linha:
+                if (posicao.decimal == 1) and (posicao.cor == cor):
+                    contagem += 1
+        return contagem
 
 
     def examinar_casas_brancas(self, linha: int, coluna: int) -> bool:

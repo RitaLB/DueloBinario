@@ -12,7 +12,7 @@ from enums import EstadoJogo
 from enums import JogadorDaVez
 
 from DueloBinario import DueloBinario
-
+# FALTA CONFIGURAR MUDANÇA NA COR DO DÍGITO INSERIDO AO CLICAR EM "ENVIAR JOGADA"
 class PlayerInterface(DogPlayerInterface):
     def __init__(self):
         self.main_Window = self.criar_main_window()
@@ -430,7 +430,19 @@ class PlayerInterface(DogPlayerInterface):
         message = self.dog_server_interface.initialize(player_name, self)
         messagebox.showinfo(message=message)
 
+    def reiniciar_tabuleiro(self):
+        for x in range(12):
+            for y in range(12):
+                if (x + y) % 2 == 0:
+                    self.tabuleiro[x][y].configure(image=self.empty_black)
+                else:
+                    self.tabuleiro[x][y].configure(image=self.empty_white)
 
+    def reiniciar_placar(self):
+        self.placar.update_player_score(1, 0)
+        self.placar.update_player_score(2, 0)
+        # DESCOBRIR COMO REINICIAR CONEXÃO COM ALGUM JOGADOR DO DOG PARA MUDAR NOME DO JOGADOR 2
+        
     # --- Funções clique mouse casas ----
     def click_casa_branca(self, event, digito, linha, coluna):
         if self.jogador_da_vez == JogadorDaVez.LOCAL and self.estado_jogo == EstadoJogo.PARTIDA_EM_ANDAMENTO:
@@ -490,6 +502,21 @@ class PlayerInterface(DogPlayerInterface):
 
     def novo_jogo(self):
         messagebox.showinfo("novo jogo", "Você clicou em 'novo jogo' !")
+        if self.jogo.get_estado_jogo() == EstadoJogo.PARTIDA_EM_ANDAMENTO:
+            messagebox.showinfo("Partida em andamento", "Não é possível reiniciar o jogo enquanto a partida estiver em andamento!")
+            return
+        if self.jogo.get_estado_jogo() == EstadoJogo.INICIAL:
+            messagebox.showinfo("Estado inicial", "O jogo já está em seu estado inicial. Inicie umka partida para jogar!")
+            return
+
+        self.jogo.reiniciar_jogo()
+        self.set_estado_jogo(EstadoJogo.INICIAL)
+        self.reiniciar_tabuleiro()
+        self.reiniciar_placar()
+        # DSESCOBRIR COMO INICIAR NOVA CONEXÃO COM ALGUM JOGADOR DO DOG
+        
+
+
 
     # ----- Funcoes set ,  get e atualização-----
     def atualizar_mensagem_jogador_da_vez(self):

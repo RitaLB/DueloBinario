@@ -40,13 +40,13 @@ class Tabuleiro():
         pass
 
     def calcular_decimal(self, linha: int, coluna: int) -> int:
-        pos_digito_3 = (linha-1, coluna)
+        pos_digito_3 = (((linha-1)% 12), coluna) 
         #print("posicao digito 3 = ", pos_digito_3)
-        pos_digito_2 = (linha, coluna -1)
+        pos_digito_2 = (linha, ((coluna -1)% 12))
         #print("posicao digito 2 = ", pos_digito_2)
-        pos_digito_1 = (linha +1, coluna )
+        pos_digito_1 = (((linha +1)% 12), coluna )
         #print("posicao digito 1 = ", pos_digito_1)
-        pos_digito_0 = (linha, coluna+1)
+        pos_digito_0 = (linha, ((coluna+1)% 12)) 
         #print("posicao digito 0 = ", pos_digito_0)
         
         digito_0 = str(self.tabuleiro[pos_digito_0[0]][pos_digito_0[1]].digito)
@@ -150,8 +150,9 @@ class Tabuleiro():
     def limpar_casa_branca(self, linha: int, coluna: int):
         self.tabuleiro[linha][coluna].limpar_posicao()
 
-    def reiniciar_tabuleiro():
-        pass
+    def reiniciar_tabuleiro(self):
+        self.tabuleiro = self.criar_tabuleiro()
+        self.casa_em_modificaçao = (-1, -1)
 
     def reset_casa_em_modificacao(self):
         self.casa_em_modificaçao = (-1, -1)
@@ -162,7 +163,7 @@ class Tabuleiro():
     def verificar_casa_habilitada(self, linha: int, coluna: int) -> bool:
         return self.tabuleiro[linha][coluna].habilitada
 
-    def verificar_digito_inserido()-> bool:
+    def verificar_digito_inserido(self)-> bool:
         pass
 
     def verificar_tabuleiro_completo(self):

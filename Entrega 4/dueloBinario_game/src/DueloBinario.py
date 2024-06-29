@@ -179,10 +179,23 @@ class DueloBinario():
         return consequencias_jogada
 
     def reiniciar_placar(self): # Verificar se é usado mesmo ou se não é responsa da interface
-        pass
+        self.jogador_local.set_pontuacao(0)
+        self.jogador_remoto.set_pontuacao(0)
+        #  VERIFICAR SE FALTA ALGO
 
     def reiniciar_tabuleiro(self):
         pass
+
+    def reiniciar_jogo(self):
+        self.reiniciar_placar()
+        self.Tabuleiro.reiniciar_tabuleiro()
+        self.partida_em_andamento = False
+        self.estado_jogo = EstadoJogo.INICIAL
+        self.jogador_da_vez = JogadorDaVez.LOCAL
+        self.vencedor = None
+        self.posicao_digito_inserido = None
+        self.casa_antiga: tuple[int, int] = None
+        self.digito_inserido: int = None
 
     def set_estado_jogo(self, estado: EstadoJogo):
         self.estado_jogo = estado

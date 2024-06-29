@@ -202,7 +202,7 @@ class PlayerInterface(DogPlayerInterface):
     def criar_menu(self) -> Menu:
         menu_file = Menu(self.menu_bar, tearoff=0)
         menu_file.add_command(label="Iniciar Jogo", command=self.iniciar_partida)
-        menu_file.add_command(label="Novo Jogo", command=self.novo_jogo)
+        menu_file.add_command(label="Reiniciar Tabuleiro", command=self.novo_jogo)
         # Adicionando o menu "Jogo" à barra de menu
         self.menu_bar.add_cascade(label="Menu", menu=menu_file)
         # Configurando a barra de menu
@@ -519,7 +519,7 @@ class PlayerInterface(DogPlayerInterface):
         self.set_estado_jogo(EstadoJogo.INICIAL)
         self.reiniciar_tabuleiro()
         self.reiniciar_placar()
-        # DSESCOBRIR COMO INICIAR NOVA CONEXÃO COM ALGUM JOGADOR DO DOG
+        messagebox.showinfo("Tabuleiro reiniciado", "Clique em 'Iniciar Jogo' para começar uma nova partida!")
 
 
 

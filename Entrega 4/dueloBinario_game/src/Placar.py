@@ -14,12 +14,12 @@ class Placar(tk.Frame):
         self.create_widgets()
         self.pack()
 
-    
+
     def create_widgets(self):
         # Título
         self.titulo = tk.Label(self, text="Placar", bg = "white")
         self.titulo.grid(row=0, column=0, columnspan=3)
-        
+
         # Primeira coluna
         self.jogador1_label = tk.Label(self, text=self.jogador1_name,  bg = "white")
         self.jogador1_label.grid(row=1, column=1)
@@ -39,10 +39,10 @@ class Placar(tk.Frame):
 
         self.jogador2_score_label = tk.Label(self, text=str(self.jogador2_score),  bg = "white")
         self.jogador2_score_label.grid(row=2, column=2)
-        
-    
 
-        
+
+
+
     def create_color_image(self, color):
         img = tk.PhotoImage(width=30, height=30)
         img.put(color, to=(0, 0, 49, 49))
@@ -64,4 +64,5 @@ class Placar(tk.Frame):
             self.jogador2_score = score
             self.jogador2_score_label.config(text=str(self.jogador2_score))
         else:
+            self.update_player_names("Jogador 2", 2)
             print("Player inválido!")

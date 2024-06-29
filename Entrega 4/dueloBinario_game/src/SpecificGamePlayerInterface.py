@@ -16,7 +16,7 @@ from DueloBinario import DueloBinario
 class PlayerInterface(DogPlayerInterface):
     def __init__(self):
         self.main_Window = self.criar_main_window()
-        self.main_Frame = Frame(self.main_Window, padx=32, pady=25, bg="white") 
+        self.main_Frame = Frame(self.main_Window, padx=32, pady=25, bg="white")
         self.main_Frame.grid(row=1, column=1) # $
         self.tabuleiro: list[Label] = self.criar_tabuleiro()
         self.board_view = [] # verificar necessidade
@@ -24,7 +24,7 @@ class PlayerInterface(DogPlayerInterface):
         self.estado_jogo : EstadoJogo = EstadoJogo.INICIAL
         self.jogador_da_vez : JogadorDaVez = None
         self.jogo = DueloBinario("", "")
-        self.menu_bar = Menu(self.main_Window) 
+        self.menu_bar = Menu(self.main_Window)
         self.menu_file : Menu = self.criar_menu() # verificar necessidade
         self.vencedor: JogadorDaVez = None
         self.mensagem_jogador_da_vez : Label = self.criar_mensagem_jogador_da_vez() # $
@@ -64,10 +64,10 @@ class PlayerInterface(DogPlayerInterface):
         deciamis.append(self.D7_vermelho)
         deciamis.append(self.D8_vermelho)
         deciamis.append(self.D9_vermelho)
-             
+
 
         return deciamis
-    
+
     def alocar_decimais_vermelhos(self) -> list[ImageTk.PhotoImage]:
         deciamis = []
         self.D0_azul = None
@@ -110,10 +110,10 @@ class PlayerInterface(DogPlayerInterface):
         deciamis.append(self.D8_vermelho)
         deciamis.append(self.D9_azul)
         deciamis.append(self.D9_vermelho)
-                
+
 
         return deciamis
-    
+
 
     def criar_main_window(self) -> tk.Tk:
         main_Window = tk.Tk()
@@ -151,10 +151,10 @@ class PlayerInterface(DogPlayerInterface):
         self.label_regras.grid(row=2, column= 0)
 
         #Placar e ordem digitos
-       
+
         self.placar_e_ordem_frame = Frame(main_Window, padx=7,  pady=1, bg="white")
         self.placar_e_ordem_frame.grid(row=1, column=0)
-            
+
             #placar
         self.placar_frame = Frame(self.placar_e_ordem_frame, padx=4,  pady=4, bg="white", borderwidth=1, relief="solid")
         self.placar_frame.grid(row=0, column=0)
@@ -211,7 +211,7 @@ class PlayerInterface(DogPlayerInterface):
         return menu_file
 
 
-    
+
     def criar_tabuleiro(self) -> list[Label]:
 
         #Imagens Tabuleiro
@@ -221,7 +221,7 @@ class PlayerInterface(DogPlayerInterface):
         nl = int(l * 0.7)
         nh = int(h * 0.7)
         img_empty_white = img_empty_white.resize((nl, nh))
-        self.empty_white = ImageTk.PhotoImage(img_empty_white) #Porque prescisa do self? 
+        self.empty_white = ImageTk.PhotoImage(img_empty_white) #Porque prescisa do self?
 
         #Casas pretas
         img_empty_black = Image.open("imagens/black_square.png")
@@ -442,7 +442,7 @@ class PlayerInterface(DogPlayerInterface):
         self.placar.update_player_score(1, 0)
         self.placar.update_player_score(2, 0)
         # DESCOBRIR COMO REINICIAR CONEXÃO COM ALGUM JOGADOR DO DOG PARA MUDAR NOME DO
-        
+
     # --- Funções clique mouse casas ----
     def click_casa_branca(self, event, digito, linha, coluna):
         if self.jogador_da_vez == JogadorDaVez.LOCAL and self.estado_jogo == EstadoJogo.PARTIDA_EM_ANDAMENTO:
@@ -459,16 +459,16 @@ class PlayerInterface(DogPlayerInterface):
             if casa_antiga[0] != -1:
                 self.tabuleiro[casa_antiga[0]][casa_antiga[1]].configure(image=self.empty_white)
             self.tabuleiro[linha][coluna].configure(image=self.zero_azul)
-            self.dados_jogada_atual = {"digito": 0, "linha": linha, "coluna": coluna}  
+            self.dados_jogada_atual = {"digito": 0, "linha": linha, "coluna": coluna}
         #self.tabuleiro[linha % len(self.tabuleiro)][coluna % len(self.tabuleiro[0])] = 0
-                
+
     def left_click(self, linha, coluna):
         casa_antiga = self.jogo.inserir_digito(1, linha, coluna)
         if casa_antiga:
             if casa_antiga[0] != -1:
                 self.tabuleiro[casa_antiga[0]][casa_antiga[1]].configure(image=self.empty_white)
             self.tabuleiro[linha][coluna].configure(image=self.um_azul)
-            self.dados_jogada_atual = {"digito": 1, "linha": linha, "coluna": coluna} 
+            self.dados_jogada_atual = {"digito": 1, "linha": linha, "coluna": coluna}
         #self.tabuleiro[linha % len(self.tabuleiro)][coluna % len(self.tabuleiro[0])] = 0
 
     # ------ Funções menu -----
@@ -479,16 +479,22 @@ class PlayerInterface(DogPlayerInterface):
         if partida_em_andamento:
             messagebox.showinfo("Partida em andamento", "Já existe uma partida em andamento!")
             return
-        
+
         tabuleiro_estado_inicial = self.jogo.verificar_estado_inicial_tabuleiro()
         if not tabuleiro_estado_inicial:
             messagebox.showinfo("Tabuleiro não está no estado inicial", "Clique em 'Novo Jogo' para reiniciar o estado do tabuleiro!")
             return
-        
+
         self.start_status = self.dog_server_interface.start_match(2)
-        
-        j = self.start_status.get_players()
-        jogador_2 = self.start_status.get_players()[1][0] 
+
+        try:
+            jogador_2 = self.start_status.get_players()[1][0]
+        except Exception as e:
+            print("Erro ao tentar iniciar partida: ", e)
+            messagebox.showinfo("Erro", "Não há outro jogador disponível no momento!")
+            self.placar.update_player_names("Player 2", 2)
+            return
+
         self.placar.update_player_names(jogador_2, 2)
         self.jogo.update_nome_jogador(jogador_2, 2)
 
@@ -514,7 +520,7 @@ class PlayerInterface(DogPlayerInterface):
         self.reiniciar_tabuleiro()
         self.reiniciar_placar()
         # DSESCOBRIR COMO INICIAR NOVA CONEXÃO COM ALGUM JOGADOR DO DOG
-        
+
 
 
 
@@ -542,7 +548,7 @@ class PlayerInterface(DogPlayerInterface):
             coluna = casa[2]
             #print("Decimal modificado = ", decimal)
             self.atualizar_casa_preta(decimal, linha, coluna)
-          
+
     def atualizar_casa_preta(self, decimal, linha, coluna):
         match decimal:
             case 0:
@@ -608,9 +614,9 @@ class PlayerInterface(DogPlayerInterface):
         messagebox.showinfo("enviar jogada", "Você clicou em 'enviar jogada' !")
         if self.jogador_da_vez == JogadorDaVez.LOCAL:
             if self.dados_jogada_atual:
-                # casas modificadas -> casas modificadas : 
+                # casas modificadas -> casas modificadas :
                 # list[tuple(decimal: int, linha: int , coluna: int]]
-                # pontuacao_nova: int ; 
+                # pontuacao_nova: int ;
                 consequencias_jogada : dict = self.jogo.confirmar_jogada()
                 #print("Retorno de confirmar jogada = ", consequencias_jogada)
                 casas_modificadas: list[tuple[int, int, int]] = consequencias_jogada["casas_modificadas"]
@@ -628,20 +634,20 @@ class PlayerInterface(DogPlayerInterface):
                     self.atualizar_mensagem_jogador_da_vez()
                     self.dados_jogada_atual["match_status"]= "next"
                 self.dog_server_interface.send_move(self.dados_jogada_atual)
-                
+
             else:
                 messagebox.showinfo("Jogada inválida", "Você precisa selecionar uma casa para jogar!")
-        
+
         elif self.jogador_da_vez == JogadorDaVez.REMOTO:
             messagebox.showinfo("Jogada inválida", "Ainda não é a sua vez de jogar!")
             return
-        
+
     # ----- Funções DOG ----
     def receive_start(self, start_status):
         messagebox.showinfo("iniciar jogo", "Você recebeu uma solicitação de inicio de jogo!' !")
         message = start_status.get_message()
         messagebox.showinfo(message=message)
-        jogador_2 = start_status.get_players()[1][0] 
+        jogador_2 = start_status.get_players()[1][0]
 
         self.placar.update_player_names(jogador_2, 2)
         self.set_estado_jogo(EstadoJogo.PARTIDA_EM_ANDAMENTO)

@@ -80,7 +80,7 @@ class Tabuleiro():
         contagem = 0
         for linha in self.tabuleiro:
             for posicao in linha:
-                if (posicao.decimal == 2) and (posicao.cor == cor):
+                if (posicao.decimal == 2) and (posicao.cor_jogador == cor):
                     contagem += 1
         return contagem
 
@@ -88,7 +88,7 @@ class Tabuleiro():
         contagem = 0
         for linha in self.tabuleiro:
             for posicao in linha:
-                if (posicao.decimal == 1) and (posicao.cor == cor):
+                if (posicao.decimal == 1) and (posicao.cor_jogador == cor):
                     contagem += 1
         return contagem
 

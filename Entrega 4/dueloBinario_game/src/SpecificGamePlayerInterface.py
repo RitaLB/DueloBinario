@@ -441,7 +441,7 @@ class PlayerInterface(DogPlayerInterface):
     def reiniciar_placar(self):
         self.placar.update_player_score(1, 0)
         self.placar.update_player_score(2, 0)
-        # DESCOBRIR COMO REINICIAR CONEXÃO COM ALGUM JOGADOR DO DOG PARA MUDAR NOME DO JOGADOR 2
+        # DESCOBRIR COMO REINICIAR CONEXÃO COM ALGUM JOGADOR DO DOG PARA MUDAR NOME DO
         
     # --- Funções clique mouse casas ----
     def click_casa_branca(self, event, digito, linha, coluna):

@@ -15,7 +15,7 @@ class Posicao():
 
     def atualizar_posicao_preta(self, decimal: int, cor: str):
         self.decimal = decimal
-        self.cor = cor
+        self.cor_jogador = cor
 
     def definirCor():
         pass

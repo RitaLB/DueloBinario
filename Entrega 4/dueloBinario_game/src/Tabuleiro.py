@@ -38,13 +38,13 @@ class Tabuleiro():
 
     def calcular_decimal(self, linha: int, coluna: int) -> int:
         pos_digito_3 = (((linha-1)% 12), coluna) 
-        #print("posicao digito 3 = ", pos_digito_3)
+       
         pos_digito_2 = (linha, ((coluna -1)% 12))
-        #print("posicao digito 2 = ", pos_digito_2)
+      
         pos_digito_1 = (((linha +1)% 12), coluna )
-        #print("posicao digito 1 = ", pos_digito_1)
+       
         pos_digito_0 = (linha, ((coluna+1)% 12)) 
-        #print("posicao digito 0 = ", pos_digito_0)
+        
         
         digito_0 = str(self.tabuleiro[pos_digito_0[0]][pos_digito_0[1]].digito)
         digito_1 = str(self.tabuleiro[pos_digito_1[0]][pos_digito_1[1]].digito)
@@ -52,9 +52,8 @@ class Tabuleiro():
         digito_3 = str(self.tabuleiro[pos_digito_3[0]][pos_digito_3[1]].digito)
         
         binario = digito_3 + digito_2 + digito_1 + digito_0
-        #print("binario = ", binario)
+        
         decimal_inicial = int(binario, 2)
-        #print("d i = " , decimal_inicial)
         
         unidades = decimal_inicial - 10
         
@@ -63,7 +62,6 @@ class Tabuleiro():
         else:
             decimal = decimal_inicial
 
-        #print("decimal = ", decimal)
         return decimal
 
     def confirmar_jogada(self):
@@ -115,7 +113,6 @@ class Tabuleiro():
             coluna = casa[1]
             habilitada = self.tabuleiro[linha][coluna].habilitada
             if (habilitada):
-                #print("casa branca habilitada = ", casa)
                 grupo_completo = False
         return grupo_completo
                 
@@ -132,8 +129,6 @@ class Tabuleiro():
                 self.limpar_casa_branca(self.casa_em_modificaçao[0], self.casa_em_modificaçao[1])
 
             self.tabuleiro[linha][coluna].atualizar_posicao_branca(digito, "blue")
-            #print("diito inserido = ", digito)
-            #print("POSICAO = ", linha, coluna)
             self.set_casa_em_modificacao(linha, coluna)
         else:
             casa_antiga = None
@@ -142,8 +137,6 @@ class Tabuleiro():
         
     def inserir_digito_recebido(self, digito: int, linha: int, coluna: int):
         self.tabuleiro[linha][coluna].atualizar_posicao_branca(digito, "black")
-        #print("diito recebido inserido = ", digito)
-        #print("POSICAO = ", linha, coluna)
         self.tabuleiro[linha][coluna].desabilitar_mudanca()
 
     def limpar_casa_branca(self, linha: int, coluna: int):

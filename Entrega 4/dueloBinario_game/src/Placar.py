@@ -65,4 +65,4 @@ class Placar(tk.Frame):
             self.jogador2_score_label.config(text=str(self.jogador2_score))
         else:
             self.update_player_names("Jogador 2", 2)
-            print("Player inválido!")
+           

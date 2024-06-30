@@ -44,12 +44,12 @@ class DueloBinario():
     def avaliar_consequencias_digito(self, linha_digito: int, coluna_digito: int) ->dict:  # Retorno com dicionario. casas modificadas : list[tuple(decimal: int, linha: int , coluna: int]] pontuacao_nova: int
         casas_modificadas = []
         casas_pretas = self.Tabuleiro.achar_casas_pretas(linha_digito, coluna_digito)
-        #print("casas pretas encontradas = ", casas_pretas)
+        
         for casa in casas_pretas:
             pontos = 0
             grupo_completo = self.Tabuleiro.examinar_casas_brancas(casa[0], casa[1])
             if grupo_completo:
-                #print("grupo completo = ", grupo_completo)
+                
                 decimal = self.Tabuleiro.calcular_decimal(casa[0], casa[1])
                 cor = self.get_cor_jogador_da_vez()
                 self.Tabuleiro.inserir_decimal(casa[0], casa[1], decimal, cor)
@@ -88,7 +88,7 @@ class DueloBinario():
                 return pontos
             case 1:
                 numero_1s = self.Tabuleiro.contar_1s(self.get_cor_jogador_da_vez())
-                print("numero_1s = ", numero_1s)
+                
                 if ((numero_1s % 3) == 0) and (numero_1s != 0):
                     pontos = 9
                 else:
@@ -118,7 +118,7 @@ class DueloBinario():
     def confirmar_jogada(self) -> dict: # Retorno com dicionario. casas modificadas : list[tuple(decimal: int, linha: int , coluna: int]] pontuacao_nova: int
         self.Tabuleiro.confirmar_jogada()
         consequencias_jogada = self.avaliar_consequencias_digito(self.posicao_digito_inserido[0], self.posicao_digito_inserido[1])
-        print("consequencias_jogada dentro de confirmar jogada DB = ", consequencias_jogada)
+        
         self.set_jogador_da_vez(JogadorDaVez.REMOTO)
         self.casa_antiga = None
         self.digito_inserido = None
@@ -127,7 +127,7 @@ class DueloBinario():
 
         if partida_finalizada:
             self.estado_jogo = EstadoJogo.PARTIDA_FINALIZADA
-            print("PARTIDA INALIZADA NO DB")
+           
 
         return consequencias_jogada
     
@@ -167,7 +167,7 @@ class DueloBinario():
         partida_finalizada = self.avaliar_fim_partida()
         if partida_finalizada:
             self.estado_jogo = EstadoJogo.PARTIDA_FINALIZADA
-            print("PARTIDA INALIZADA NO DB")
+           
 
         return consequencias_jogada
 

@@ -521,9 +521,6 @@ class PlayerInterface(DogPlayerInterface):
         self.reiniciar_placar()
         messagebox.showinfo("Tabuleiro reiniciado", "Clique em 'Iniciar Jogo' para começar uma nova partida!")
 
-
-
-
     # ----- Funcoes set ,  get e atualização-----
     def atualizar_mensagem_jogador_da_vez(self):
         if self.jogador_da_vez == JogadorDaVez.LOCAL:
@@ -605,21 +602,28 @@ class PlayerInterface(DogPlayerInterface):
     def inserir_digito_recebido(self, digito: int, linha: int, coluna: int):
         match digito:
             case 0:
-                self.tabuleiro[linha][coluna].configure(image=self.zero_azul)
+                self.tabuleiro[linha][coluna].configure(image=self.zero_preto)
             case 1:
-                self.tabuleiro[linha][coluna].configure(image=self.um_azul)
+                self.tabuleiro[linha][coluna].configure(image=self.um_preto)
 
    # ----- Função botão ----
     def enviar_jogada(self):
-        messagebox.showinfo("enviar jogada", "Você clicou em 'enviar jogada' !")
         if self.jogador_da_vez == JogadorDaVez.LOCAL:
             if self.dados_jogada_atual:
+                digito = self.dados_jogada_atual["digito"]
+                linha = self.dados_jogada_atual["linha"]
+                coluna = self.dados_jogada_atual["coluna"]
                 # casas modificadas -> casas modificadas :
                 # list[tuple(decimal: int, linha: int , coluna: int]]
                 # pontuacao_nova: int ;
                 consequencias_jogada : dict = self.jogo.confirmar_jogada()
                 #print("Retorno de confirmar jogada = ", consequencias_jogada)
                 casas_modificadas: list[tuple[int, int, int]] = consequencias_jogada["casas_modificadas"]
+
+                if digito == 0:
+                    self.tabuleiro[linha][coluna].configure(image=self.zero_preto)
+                else:
+                    self.tabuleiro[linha][coluna].configure(image=self.um_preto)
                 self.atualizar_tabuleiro(casas_modificadas)
 
                 self.placar.update_player_score(0, consequencias_jogada["pontuacao_nova"])

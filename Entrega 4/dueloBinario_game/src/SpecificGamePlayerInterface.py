@@ -630,15 +630,17 @@ class PlayerInterface(DogPlayerInterface):
                 self.jogador_da_vez = JogadorDaVez.REMOTO
 
                 self.set_estado_jogo(self.jogo.get_estado_jogo())
+
                 if self.estado_jogo == EstadoJogo.PARTIDA_FINALIZADA:
+                    print("PARTIDA FINALIZADA NA INTERFACE")
                     self.vencedor = self.jogo.get_vecedor()
-                    messagebox.showinfo("Fim de jogo", f"O jogador {self.vencedor.value} venceu!")
+                    messagebox.showinfo("Fim de jogo", f"Dados do vencedor:\n {self.vencedor}")
                     self.dados_jogada_atual["match_status"]= "finished"
                 else:
                     self.atualizar_mensagem_jogador_da_vez()
                     self.dados_jogada_atual["match_status"]= "next"
+                
                 self.dog_server_interface.send_move(self.dados_jogada_atual)
-
             else:
                 messagebox.showinfo("Jogada inválida", "Você precisa selecionar uma casa para jogar!")
 
@@ -654,6 +656,7 @@ class PlayerInterface(DogPlayerInterface):
         jogador_2 = start_status.get_players()[1][0]
 
         self.placar.update_player_names(jogador_2, 2)
+        self.jogo.update_nome_jogador(jogador_2, 2)
         self.set_estado_jogo(EstadoJogo.PARTIDA_EM_ANDAMENTO)
         self.set_jogador_da_vez(JogadorDaVez.REMOTO)
         self.atualizar_mensagem_jogador_da_vez()
@@ -675,8 +678,9 @@ class PlayerInterface(DogPlayerInterface):
         estado_jogo = self.jogo.get_estado_jogo()
         self.set_estado_jogo(estado_jogo)
         if self.estado_jogo == EstadoJogo.PARTIDA_FINALIZADA:
+            print("PARTIDA FINALIZADA NA INTERFACE")
             self.vencedor = self.jogo.get_vecedor()
-            messagebox.showinfo("Fim de jogo", f"O jogador {self.vencedor.value} venceu!")
+            messagebox.showinfo("Fim de jogo", f"Dados do vencedor:\n {self.vencedor}")
         else:
             self.atualizar_mensagem_jogador_da_vez()
             self.set_jogador_da_vez(JogadorDaVez.LOCAL)

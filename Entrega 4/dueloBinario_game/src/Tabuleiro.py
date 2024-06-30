@@ -138,7 +138,9 @@ class Tabuleiro():
             #print("diito inserido = ", digito)
             #print("POSICAO = ", linha, coluna)
             self.set_casa_em_modificacao(linha, coluna)
-        
+        else:
+            casa_antiga = None
+            
         return casa_antiga
         
     def inserir_digito_recebido(self, digito: int, linha: int, coluna: int):
@@ -170,7 +172,7 @@ class Tabuleiro():
         completo = False
         for coluna in self.tabuleiro:
             for posicao in coluna:
-                if (posicao.digito == None):
+                if (posicao.cor == "branca") and (posicao.digito == None):
                     return False
         return True
 

@@ -63,9 +63,9 @@ class DueloBinario():
 
     def avaliar_fim_partida(self):
         if (self.Tabuleiro.verificar_tabuleiro_completo()):
-            if (self.jogador_local.pontuacao == 1):
+            if (self.jogador_local.pontuacao == 0):
                 self.set_vencedor(self.jogador_local)
-            elif (self.jogador_remoto.pontuacao == 1):
+            elif (self.jogador_remoto.pontuacao == 0):
                 self.set_vencedor(self.jogador_remoto)
             else: 
                 if self.jogador_local.pontuacao > self.jogador_remoto.pontuacao:
@@ -128,6 +128,7 @@ class DueloBinario():
 
         if partida_finalizada:
             self.estado_jogo = EstadoJogo.PARTIDA_FINALIZADA
+            print("PARTIDA INALIZADA NO DB")
 
         return consequencias_jogada
     
@@ -175,6 +176,7 @@ class DueloBinario():
         partida_finalizada = self.avaliar_fim_partida()
         if partida_finalizada:
             self.estado_jogo = EstadoJogo.PARTIDA_FINALIZADA
+            print("PARTIDA INALIZADA NO DB")
 
         return consequencias_jogada
 

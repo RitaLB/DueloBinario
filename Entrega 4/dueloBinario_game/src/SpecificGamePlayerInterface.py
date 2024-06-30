@@ -19,7 +19,7 @@ class PlayerInterface(DogPlayerInterface):
         self.main_Frame = Frame(self.main_Window, padx=32, pady=25, bg="white")
         self.main_Frame.grid(row=1, column=1) # $
         self.tabuleiro: list[Label] = self.criar_tabuleiro()
-        self.board_view = [] # verificar necessidade
+        self.board_view = [] 
         self.dados_jogada_atual: dict = None
         self.estado_jogo : EstadoJogo = EstadoJogo.INICIAL
         self.jogador_da_vez : JogadorDaVez = None
@@ -30,10 +30,7 @@ class PlayerInterface(DogPlayerInterface):
         self.mensagem_jogador_da_vez : Label = self.criar_mensagem_jogador_da_vez() # $
         self.botao_enviar_jogada: Button = self.criar_botao_enviar_jogada() # $
         self.start_status = None
-        self.jogada_atual : dict = None
         self.inicializar_imagem_decimais()
-        #self.imagens_decimais_vermelhos = self.alocar_decimais_vermelhos()
-        #self.imagens_decimais_azuis = self.alocar_decimais_azuis()
 
         # Configurações DOG
         self.configurar_dog()
@@ -42,78 +39,6 @@ class PlayerInterface(DogPlayerInterface):
 
 
     # ----- Funções inicialização -----
-    def alocar_decimais_vermelhos(self) -> list[ImageTk.PhotoImage]:
-        deciamis = []
-        self.D0_vermelho = None
-        self.D1_vermelho = None
-        self.D2_vermelho = None
-        self.D3_vermelho = None
-        self.D4_vermelho = None
-        self.D5_vermelho = None
-        self.D6_vermelho = None
-        self.D7_vermelho = None
-        self.D8_vermelho = None
-        self.D9_vermelho = None
-        deciamis.append(self.D0_vermelho)
-        deciamis.append(self.D1_vermelho)
-        deciamis.append(self.D2_vermelho)
-        deciamis.append(self.D3_vermelho)
-        deciamis.append(self.D4_vermelho)
-        deciamis.append(self.D5_vermelho)
-        deciamis.append(self.D6_vermelho)
-        deciamis.append(self.D7_vermelho)
-        deciamis.append(self.D8_vermelho)
-        deciamis.append(self.D9_vermelho)
-
-
-        return deciamis
-
-    def alocar_decimais_vermelhos(self) -> list[ImageTk.PhotoImage]:
-        deciamis = []
-        self.D0_azul = None
-        self.D0_vermelho = None
-        self.D1_azul = None
-        self.D1_vermelho = None
-        self.D2_azul = None
-        self.D2_vermelho = None
-        self.D3_azul = None
-        self.D3_vermelho = None
-        self.D4_azul = None
-        self.D4_vermelho = None
-        self.D5_azul = None
-        self.D5_vermelho = None
-        self.D6_azul = None
-        self.D6_vermelho = None
-        self.D7_azul = None
-        self.D7_vermelho = None
-        self.D8_azul = None
-        self.D8_vermelho = None
-        self.D9_azul = None
-        self.D9_vermelho = None
-        deciamis.append(self.D0_azul)
-        deciamis.append(self.D0_vermelho)
-        deciamis.append(self.D1_azul)
-        deciamis.append(self.D1_vermelho)
-        deciamis.append(self.D2_azul)
-        deciamis.append(self.D2_vermelho)
-        deciamis.append(self.D3_azul)
-        deciamis.append(self.D3_vermelho)
-        deciamis.append(self.D4_azul)
-        deciamis.append(self.D4_vermelho)
-        deciamis.append(self.D5_azul)
-        deciamis.append(self.D5_vermelho)
-        deciamis.append(self.D6_azul)
-        deciamis.append(self.D6_vermelho)
-        deciamis.append(self.D7_azul)
-        deciamis.append(self.D7_vermelho)
-        deciamis.append(self.D8_azul)
-        deciamis.append(self.D8_vermelho)
-        deciamis.append(self.D9_azul)
-        deciamis.append(self.D9_vermelho)
-
-
-        return deciamis
-
 
     def criar_main_window(self) -> tk.Tk:
         main_Window = tk.Tk()

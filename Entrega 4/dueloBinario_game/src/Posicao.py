@@ -17,25 +17,17 @@ class Posicao():
         self.decimal = decimal
         self.cor_jogador = cor
 
-    def definirCor():
-        pass
-
     def desabilitar_mudanca(self):
         self.habilitada = False
 
     def get_digito(self) -> int:
         return self.digito
     
-    def habilitar_mudanca(self):
-        pass
-
     def limpar_posicao(self):
         self.digito = None
         self.cor_digito = None
 
     def mudar_cor_digito(self, cor: str) :
         self.cor_digito = cor
-    
-    def reiniciar_posicao():
-        pass
+
     

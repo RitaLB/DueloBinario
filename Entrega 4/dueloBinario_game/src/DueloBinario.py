@@ -16,7 +16,6 @@ class DueloBinario():
         self.jogador_remoto: Jogador = Jogador(nome_jogador_remoto, 0)
         self.partida_em_andamento: bool = False
         self.posicao_digito_inserido: tuple[int, int] = None
-        self.rodada_atual: int = None
         self.Tabuleiro: Tabuleiro = Tabuleiro()
         self.vencedor: str = None # str ou Jogador?
 
@@ -139,11 +138,6 @@ class DueloBinario():
         else:
             return "blue"
 
-    def get_dados_jogada(self) -> tuple[int, int, int]: # digito, coluna, linha
-        return tuple()
-
-    def get_digito_foi_inserido(self) -> bool:
-        return self.digito_inserido
 
     def get_estado_jogo(self) -> EstadoJogo:
         return self.estado_jogo
@@ -166,9 +160,6 @@ class DueloBinario():
 
         return self.casa_antiga
 
-    def obter_nomes_jogadores(self) -> tuple[str, str]: # inserir tipo de retorno no diagrama
-        pass
-
     def receber_jogada(self, digito: int, linha: int, coluna: int) -> dict:
         self.Tabuleiro.inserir_digito_recebido(digito, linha, coluna)
         consequencias_jogada = self.avaliar_consequencias_digito(linha, coluna)
@@ -180,12 +171,12 @@ class DueloBinario():
 
         return consequencias_jogada
 
-    def reiniciar_placar(self): # Verificar se é usado mesmo ou se não é responsa da interface
+    def reiniciar_placar(self): 
         self.jogador_local.set_pontuacao(0)
         self.jogador_remoto.set_pontuacao(0)
-        #  VERIFICAR SE FALTA ALGO
 
     def reiniciar_tabuleiro(self):
+        #FALTA IMPLEMENTAR!!
         pass
 
     def reiniciar_jogo(self):
@@ -202,17 +193,14 @@ class DueloBinario():
     def set_estado_jogo(self, estado: EstadoJogo):
         self.estado_jogo = estado
 
-    def set_digito_foi_inserido(self, valor: bool):
-        pass
-
     def set_digito_inserido(self, digito: int): #Atualizar argumento no diagrama
-        pass
+        self.digito_inserido = digito
 
     def set_jogador_da_vez(self, jogador: JogadorDaVez):
         self.jogador_da_vez = jogador
 
     def set_posicao_digito_inserido(self, linha: int, coluna: int): # verificar e atualizar argumentos no diagrama e aqui
-        pass
+        self.posicao_digito_inserido = (linha, coluna)
     
     def set_vencedor(self, jogador: JogadorDaVez): # verificar e atualizar argumentos no diagrama e aqui
         self.vencedor = jogador
@@ -232,10 +220,5 @@ class DueloBinario():
         else:
             return False
 
-    def verificar_jogada(self) -> bool:
-        pass
-    
-    def contar_um(self) -> int:
-        pass
 
 

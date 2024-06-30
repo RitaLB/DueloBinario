@@ -36,9 +36,6 @@ class Tabuleiro():
 
         return casas_pretas
 
-    def atualizar_tabuleiro(self):
-        pass
-
     def calcular_decimal(self, linha: int, coluna: int) -> int:
         pos_digito_3 = (((linha-1)% 12), coluna) 
         #print("posicao digito 3 = ", pos_digito_3)
@@ -165,9 +162,6 @@ class Tabuleiro():
     def verificar_casa_habilitada(self, linha: int, coluna: int) -> bool:
         return self.tabuleiro[linha][coluna].habilitada
 
-    def verificar_digito_inserido(self)-> bool:
-        pass
-
     def verificar_tabuleiro_completo(self):
         completo = False
         for coluna in self.tabuleiro:
@@ -175,8 +169,5 @@ class Tabuleiro():
                 if (posicao.cor == "branca") and (posicao.digito == None):
                     return False
         return True
-
-    def verificar_preenchimento_posicao() -> bool:
-        pass
 
 

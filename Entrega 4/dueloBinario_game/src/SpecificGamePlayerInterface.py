@@ -529,6 +529,7 @@ class PlayerInterface(DogPlayerInterface):
             cor = "blue"
         self.img_vez.put(cor, to=(0, 0, 30, 30))
         self.linha_frame.update()
+        
     def set_estado_jogo(self, estado: EstadoJogo):
         self.jogo.set_estado_jogo(estado)
         self.estado_jogo = estado

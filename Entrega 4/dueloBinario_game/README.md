@@ -30,5 +30,8 @@ O comando pode variar dependendo do sistema operacional. Verifique a documentaç
 Dentro da pasta `src` execute o comando:
 
 ```bash
-python SpecificGamePlayerInterface.py
+python3 main.py
+
+Obs: Este programa apresenta comportamento adequado garantido para os sistemas operascionais Linux e Windows. 
+Não recomentamos seu uso em Mac. Seu funcionamento em Mac é instável. 
 ```

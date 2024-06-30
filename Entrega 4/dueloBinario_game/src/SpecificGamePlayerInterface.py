@@ -364,8 +364,8 @@ class PlayerInterface(DogPlayerInterface):
                     self.tabuleiro[x][y].configure(image=self.empty_white)
 
     def reiniciar_placar(self):
+        self.placar.update_player_score(0, 0)
         self.placar.update_player_score(1, 0)
-        self.placar.update_player_score(2, 0)
         # DESCOBRIR COMO REINICIAR CONEXÃO COM ALGUM JOGADOR DO DOG PARA MUDAR NOME DO
 
     # --- Funções clique mouse casas ----
@@ -417,7 +417,7 @@ class PlayerInterface(DogPlayerInterface):
         except Exception as e:
             print("Erro ao tentar iniciar partida: ", e)
             messagebox.showinfo("Erro", "Não há outro jogador disponível no momento!")
-            self.placar.update_player_names("Player 2", 2)
+            self.placar.update_player_names("Jogador 2", 2)
             return
 
         self.placar.update_player_names(jogador_2, 2)
@@ -432,12 +432,11 @@ class PlayerInterface(DogPlayerInterface):
 
 
     def novo_jogo(self):
-        messagebox.showinfo("novo jogo", "Você clicou em 'novo jogo' !")
         if self.jogo.get_estado_jogo() == EstadoJogo.PARTIDA_EM_ANDAMENTO:
             messagebox.showinfo("Partida em andamento", "Não é possível reiniciar o jogo enquanto a partida estiver em andamento!")
             return
         if self.jogo.get_estado_jogo() == EstadoJogo.INICIAL:
-            messagebox.showinfo("Estado inicial", "O jogo já está em seu estado inicial. Inicie umka partida para jogar!")
+            messagebox.showinfo("Estado inicial", "O jogo já está em seu estado inicial. Inicie uma partida para jogar!")
             return
 
         self.jogo.reiniciar_jogo()

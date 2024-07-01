@@ -24,7 +24,7 @@ class DueloBinario():
             pontuacao_atual= self.jogador_local.get_pontuacao()
         else:
             pontuacao_atual = self.jogador_remoto.get_pontuacao()
-        
+
         pontuacao_parcial = pontuacao_atual + pontos
         if pontuacao_parcial < 0:
             pontuacao_parcial = 0
@@ -44,20 +44,20 @@ class DueloBinario():
     def avaliar_consequencias_digito(self, linha_digito: int, coluna_digito: int) ->dict:  # Retorno com dicionario. casas modificadas : list[tuple(decimal: int, linha: int , coluna: int]] pontuacao_nova: int
         casas_modificadas = []
         casas_pretas = self.Tabuleiro.achar_casas_pretas(linha_digito, coluna_digito)
-        
+
         for casa in casas_pretas:
             pontos = 0
             grupo_completo = self.Tabuleiro.examinar_casas_brancas(casa[0], casa[1])
             if grupo_completo:
-                
+
                 decimal = self.Tabuleiro.calcular_decimal(casa[0], casa[1])
                 cor = self.get_cor_jogador_da_vez()
                 self.Tabuleiro.inserir_decimal(casa[0], casa[1], decimal, cor)
                 pontos += self.calcular_pontos(decimal)
                 casas_modificadas.append((decimal, casa[0], casa[1]))
-            
+
             self.atualizar_pontuacao_jogador_da_vez(pontos)
-        
+
         return {"casas_modificadas": casas_modificadas, "pontuacao_nova": self.get_pontuacao_jogador_da_vez()}
 
     def avaliar_fim_partida(self):
@@ -66,7 +66,7 @@ class DueloBinario():
                 self.set_vencedor(self.jogador_local)
             elif (self.jogador_remoto.pontuacao == 0):
                 self.set_vencedor(self.jogador_remoto)
-            else: 
+            else:
                 if self.jogador_local.pontuacao > self.jogador_remoto.pontuacao:
                     self.set_vencedor(self.jogador_local)
                 else:
@@ -75,7 +75,7 @@ class DueloBinario():
             return True   #partida acabou
         else:
             return False  #partida nao acabou
-                
+
 
     def calcular_pontos(self, decimal: int) -> int: # Verificar se tem retorno msm
         match decimal:
@@ -88,7 +88,7 @@ class DueloBinario():
                 return pontos
             case 1:
                 numero_1s = self.Tabuleiro.contar_1s(self.get_cor_jogador_da_vez())
-                
+
                 if ((numero_1s % 3) == 0) and (numero_1s != 0):
                     pontos = 9
                 else:
@@ -98,7 +98,7 @@ class DueloBinario():
                 numero_2s = self.Tabuleiro.contar_2s(self.get_cor_jogador_da_vez())
                 if ((numero_2s % 3) == 0) and (numero_2s != 0):
                     pontos = 6
-                else: 
+                else:
                     pontos = 0
                 return pontos
             case 6:
@@ -113,12 +113,12 @@ class DueloBinario():
         else:
             pontos = -1
         return pontos
-        
-        
+
+
     def confirmar_jogada(self) -> dict: # Retorno com dicionario. casas modificadas : list[tuple(decimal: int, linha: int , coluna: int]] pontuacao_nova: int
         self.Tabuleiro.confirmar_jogada()
         consequencias_jogada = self.avaliar_consequencias_digito(self.posicao_digito_inserido[0], self.posicao_digito_inserido[1])
-        
+
         self.set_jogador_da_vez(JogadorDaVez.REMOTO)
         self.casa_antiga = None
         self.digito_inserido = None
@@ -127,10 +127,10 @@ class DueloBinario():
 
         if partida_finalizada:
             self.estado_jogo = EstadoJogo.PARTIDA_FINALIZADA
-           
+
 
         return consequencias_jogada
-    
+
 
     def get_cor_jogador_da_vez(self) -> str:
         if self.jogador_da_vez == JogadorDaVez.LOCAL:
@@ -147,13 +147,13 @@ class DueloBinario():
             return self.jogador_local.get_pontuacao()
         else:
             return self.jogador_remoto.get_pontuacao()
-        
+
     def get_vecedor(self) -> JogadorDaVez:
         return self.vencedor
 
     def inserir_digito(self, digito: int, linha: int, coluna: int) -> tuple[int, int]:
         self.casa_antiga = self.Tabuleiro.inserir_digito(digito, linha, coluna)
-        
+
         if self.casa_antiga is not None:
             self.digito_inserido = digito
             self.posicao_digito_inserido = (linha, coluna)
@@ -163,20 +163,19 @@ class DueloBinario():
     def receber_jogada(self, digito: int, linha: int, coluna: int) -> dict:
         self.Tabuleiro.inserir_digito_recebido(digito, linha, coluna)
         consequencias_jogada = self.avaliar_consequencias_digito(linha, coluna)
-        
+
         partida_finalizada = self.avaliar_fim_partida()
         if partida_finalizada:
             self.estado_jogo = EstadoJogo.PARTIDA_FINALIZADA
-           
+
 
         return consequencias_jogada
 
-    def reiniciar_placar(self): 
+    def reiniciar_placar(self):
         self.jogador_local.set_pontuacao(0)
         self.jogador_remoto.set_pontuacao(0)
 
     def reiniciar_tabuleiro(self):
-        #FALTA IMPLEMENTAR!!
         pass
 
     def reiniciar_jogo(self):
@@ -201,16 +200,16 @@ class DueloBinario():
 
     def set_posicao_digito_inserido(self, linha: int, coluna: int): # verificar e atualizar argumentos no diagrama e aqui
         self.posicao_digito_inserido = (linha, coluna)
-    
+
     def set_vencedor(self, jogador: JogadorDaVez): # verificar e atualizar argumentos no diagrama e aqui
         self.vencedor = jogador
-    
+
     def update_nome_jogador(self, nome: str, jogador: int):
         if jogador == 1:
             self.jogador_local.set_nome(nome)
         else:
             self.jogador_remoto.set_nome(nome)
-    
+
     def verificar_andamento_partida(self) -> bool:
         return self.partida_em_andamento
 

@@ -19,7 +19,7 @@ class PlayerInterface(DogPlayerInterface):
         self.main_Frame = Frame(self.main_Window, padx=32, pady=25, bg="white")
         self.main_Frame.grid(row=1, column=1) # $
         self.tabuleiro: list[Label] = self.criar_tabuleiro()
-        self.board_view = [] 
+        self.board_view = []
         self.dados_jogada_atual: dict = None
         self.estado_jogo : EstadoJogo = EstadoJogo.INICIAL
         self.jogador_da_vez : JogadorDaVez = None
@@ -366,14 +366,14 @@ class PlayerInterface(DogPlayerInterface):
     def reiniciar_placar(self):
         self.placar.update_player_score(0, 0)
         self.placar.update_player_score(1, 0)
-       
+
 
     # --- Funções clique mouse casas ----
     def click_casa_branca(self, event, digito, linha, coluna):
         if self.jogador_da_vez == JogadorDaVez.LOCAL and self.estado_jogo == EstadoJogo.PARTIDA_EM_ANDAMENTO:
             if digito == 0:
                 self.left_click(linha, coluna)
-         
+
             else:
                 self.right_click(linha, coluna)
 
@@ -384,7 +384,7 @@ class PlayerInterface(DogPlayerInterface):
                 self.tabuleiro[casa_antiga[0]][casa_antiga[1]].configure(image=self.empty_white)
             self.tabuleiro[linha][coluna].configure(image=self.zero_azul)
             self.dados_jogada_atual = {"digito": 0, "linha": linha, "coluna": coluna}
-       
+
 
     def left_click(self, linha, coluna):
         casa_antiga = self.jogo.inserir_digito(1, linha, coluna)
@@ -393,7 +393,7 @@ class PlayerInterface(DogPlayerInterface):
                 self.tabuleiro[casa_antiga[0]][casa_antiga[1]].configure(image=self.empty_white)
             self.tabuleiro[linha][coluna].configure(image=self.um_azul)
             self.dados_jogada_atual = {"digito": 1, "linha": linha, "coluna": coluna}
-        
+
 
     # ------ Funções menu -----
     def iniciar_partida(self):
@@ -442,6 +442,7 @@ class PlayerInterface(DogPlayerInterface):
         self.set_estado_jogo(EstadoJogo.INICIAL)
         self.reiniciar_tabuleiro()
         self.reiniciar_placar()
+        self.placar.update_player_names("Jogador 2", 2)
         messagebox.showinfo("Tabuleiro reiniciado", "Clique em 'Iniciar Jogo' para começar uma nova partida!")
 
     # ----- Funcoes set ,  get e atualização-----
@@ -452,7 +453,7 @@ class PlayerInterface(DogPlayerInterface):
             cor = "blue"
         self.img_vez.put(cor, to=(0, 0, 30, 30))
         self.linha_frame.update()
-        
+
     def set_estado_jogo(self, estado: EstadoJogo):
         self.jogo.set_estado_jogo(estado)
         self.estado_jogo = estado
@@ -467,7 +468,7 @@ class PlayerInterface(DogPlayerInterface):
             decimal = casa[0]
             linha = casa[1]
             coluna = casa[2]
-            
+
             self.atualizar_casa_preta(decimal, linha, coluna)
 
     def atualizar_casa_preta(self, decimal, linha, coluna):
@@ -541,7 +542,7 @@ class PlayerInterface(DogPlayerInterface):
                 # list[tuple(decimal: int, linha: int , coluna: int]]
                 # pontuacao_nova: int ;
                 consequencias_jogada : dict = self.jogo.confirmar_jogada()
-               
+
                 casas_modificadas: list[tuple[int, int, int]] = consequencias_jogada["casas_modificadas"]
 
                 if digito == 0:
@@ -556,14 +557,14 @@ class PlayerInterface(DogPlayerInterface):
                 self.set_estado_jogo(self.jogo.get_estado_jogo())
 
                 if self.estado_jogo == EstadoJogo.PARTIDA_FINALIZADA:
-                   
+
                     self.vencedor = self.jogo.get_vecedor()
                     messagebox.showinfo("Fim de jogo", f"Dados do vencedor:\n {self.vencedor}")
                     self.dados_jogada_atual["match_status"]= "finished"
                 else:
                     self.atualizar_mensagem_jogador_da_vez()
                     self.dados_jogada_atual["match_status"]= "next"
-                
+
                 self.dog_server_interface.send_move(self.dados_jogada_atual)
             else:
                 messagebox.showinfo("Jogada inválida", "Você precisa selecionar uma casa para jogar!")
@@ -602,7 +603,7 @@ class PlayerInterface(DogPlayerInterface):
         estado_jogo = self.jogo.get_estado_jogo()
         self.set_estado_jogo(estado_jogo)
         if self.estado_jogo == EstadoJogo.PARTIDA_FINALIZADA:
-            
+
             self.vencedor = self.jogo.get_vecedor()
             messagebox.showinfo("Fim de jogo", f"Dados do vencedor:\n {self.vencedor}")
         else:

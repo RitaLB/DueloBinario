@@ -9,3 +9,7 @@ class EstadoJogo(Enum):
 class JogadorDaVez(Enum):
     LOCAL = 1
     REMOTO = 2
+
+class LocalJogadorDaVez(Enum):
+    JOGADOR_1 = 1
+    JOGADOR_2 = 2

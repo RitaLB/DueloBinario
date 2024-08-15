@@ -113,7 +113,7 @@ class DueloBinario():
         self.Tabuleiro.confirmar_jogada()
         consequencias_jogada = self.avaliar_consequencias_digito(self.posicao_digito_inserido[0], self.posicao_digito_inserido[1])
 
-        self.set_jogador_da_vez(JogadorDaVez.REMOTO)
+        #self.set_jogador_da_vez(JogadorDaVez.REMOTO)
         self.casa_antiga = None
         self.digito_inserido = None
         self.posicao_digito_inserido = None
@@ -141,7 +141,7 @@ class DueloBinario():
         else:
             return self.jogador_remoto.get_pontuacao()
 
-    def get_vecedor(self) -> JogadorDaVez:
+    def get_vecedor(self) -> Jogador:
         return self.vencedor
 
     def inserir_digito(self, digito: int, linha: int, coluna: int) -> tuple[int, int]:
@@ -188,8 +188,11 @@ class DueloBinario():
     def set_digito_inserido(self, digito: int): #Atualizar argumento no diagrama
         self.digito_inserido = digito
 
-    def set_jogador_da_vez(self, jogador: JogadorDaVez):
-        self.jogador_da_vez = jogador
+    def set_jogador_da_vez(self, jogador: int):
+        if jogador == 1:
+            self.jogador_da_vez = JogadorDaVez.LOCAL
+        else:
+            self.jogador_da_vez = JogadorDaVez.REMOTO
 
     def set_partida_em_andamento(self, andamento: bool):
         self.partida_em_andamento = andamento
@@ -199,14 +202,16 @@ class DueloBinario():
 
     def set_vencedor(self):  # verificar e atualizar argumentos no diagrama e aqui
         if (self.jogador_local.pontuacao == 0):
-            self.vencedor =self.jogador_local
+            self.vencedor = self.jogador_local
         elif (self.jogador_remoto.pontuacao == 0):
-            self.vencedor =self.jogador_remoto
+            self.vencedor = self.jogador_remoto
         else:
-            if self.jogador_local.pontuacao > self.jogador_remoto.pontuacao:
+            if self.jogador_local.pontuacao == self.jogador_remoto.pontuacao:
+                self.vencedor = None
+            elif self.jogador_local.pontuacao > self.jogador_remoto.pontuacao:
                 self.vencedor = self.jogador_local
             else:
-                self.vencedor =self.jogador_remoto
+                self.vencedor = self.jogador_remoto
 
     def update_nome_jogador(self, nome: str, jogador: int):
         if jogador == 1:

@@ -52,11 +52,9 @@ class Tabuleiro():
         digito_3 = str(self.tabuleiro[pos_digito_3[0]][pos_digito_3[1]].digito)
         
         binario = digito_3 + digito_2 + digito_1 + digito_0
-        print(binario)
         decimal_inicial = int(binario, 2)
-        print("decimal_inicial",decimal_inicial)
         unidades = decimal_inicial - 10
-        print("unidades",unidades)
+
         if (unidades >= 0):
             decimal = unidades + 1
         else:
@@ -123,7 +121,7 @@ class Tabuleiro():
         casa_habilitada = self.verificar_casa_habilitada(linha, coluna)
         casa_antiga = self.casa_em_modificaçao
         
-        if casa_habilitada is not None:
+        if casa_habilitada:
             if self.casa_em_modificaçao[0] is not None and self.casa_em_modificaçao[1] is not None:
                 casa_antiga = self.casa_em_modificaçao
                 self.limpar_casa_branca(self.casa_em_modificaçao[0], self.casa_em_modificaçao[1])

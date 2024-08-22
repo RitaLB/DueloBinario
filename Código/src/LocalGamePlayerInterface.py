@@ -549,7 +549,7 @@ class LocalPlayerInterface(Controler):
                 self.set_estado_jogo(estado_jogo)
                 self.set_vencedor()
 
-                if self.jogador == None:
+                if self.vencedor == None:
                     messagebox.showinfo("Fim de jogo", f"Dados do vencedor: Empate!")
                 else:
                     messagebox.showinfo("Fim de jogo", f"Dados do vencedor:\n {self.vencedor}")

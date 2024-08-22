@@ -12,8 +12,8 @@ class DueloBinario():
         self.estado_jogo: EstadoJogo = EstadoJogo.INICIAL # VERIFICAR
         self.jogada_em_andamento: bool = None
         self.jogador_da_vez : JogadorDaVez = None
-        self.jogador_local: Jogador = Jogador(nome_jogador_local, 0)
-        self.jogador_remoto: Jogador = Jogador(nome_jogador_remoto, 0)
+        self.jogador_local: Jogador = Jogador(nome_jogador_local, (0,0))
+        self.jogador_remoto: Jogador = Jogador(nome_jogador_remoto, (0,0))
         self.partida_em_andamento: bool = False
         self.posicao_digito_inserido: tuple[int, int] = None
         self.Tabuleiro: Tabuleiro = Tabuleiro()
@@ -25,16 +25,27 @@ class DueloBinario():
         else:
             pontuacao_atual = self.jogador_remoto.get_pontuacao()
 
-        pontuacao_parcial = pontuacao_atual + pontos
-        if pontuacao_parcial < 0:
-            pontuacao_parcial = 0
+        # pontuacao_atual : (int, int) (unidades, dezenas)
+        pontuacao_parcial_unidades = pontuacao_atual[0] + pontos
+        if pontuacao_parcial_unidades < 0:
+            pontuacao_parcial_unidades = 0
 
-        while pontuacao_parcial >= 10:
-            unidades = pontuacao_parcial % 10
-            dezenas = (pontuacao_parcial - unidades) / 10
-            pontuacao_parcial = unidades + dezenas
+        reiniciou_pontucao = False
+        while pontuacao_parcial_unidades >= 10:
+            unidades = pontuacao_parcial_unidades % 10
+            dezenas = (pontuacao_parcial_unidades - unidades) / 10
+            pontuacao_parcial_unidades = unidades + dezenas
+            reiniciou_pontucao = True
 
-        nova_pontuacao = pontuacao_parcial
+        pontuacao_parcial_unidades = int(pontuacao_parcial_unidades)
+        
+        pontuacao_parcial_saldo = pontuacao_atual[1]
+        if reiniciou_pontucao:
+            pontuacao_parcial_saldo += 1
+            nova_pontuacao = (pontuacao_parcial_unidades, pontuacao_parcial_saldo)
+
+        else:
+            nova_pontuacao = (pontuacao_parcial_unidades, pontuacao_parcial_saldo)
 
         if self.jogador_da_vez == JogadorDaVez.LOCAL:
             self.jogador_local.set_pontuacao(nova_pontuacao)
@@ -201,17 +212,25 @@ class DueloBinario():
         self.posicao_digito_inserido = (linha, coluna)
 
     def set_vencedor(self):  # verificar e atualizar argumentos no diagrama e aqui
-        if (self.jogador_local.pontuacao == 0):
+        # Se algum dos jogadores tiver unidades = 0, ele é o vencedor
+        if (self.jogador_local.pontuacao[0] == 0):
             self.vencedor = self.jogador_local
-        elif (self.jogador_remoto.pontuacao == 0):
+        elif (self.jogador_remoto.pontuacao[0] == 0):
             self.vencedor = self.jogador_remoto
         else:
-            if self.jogador_local.pontuacao == self.jogador_remoto.pontuacao:
-                self.vencedor = None
-            elif self.jogador_local.pontuacao > self.jogador_remoto.pontuacao:
+            # Se não, o vencedor é o que tiver mais pontos nos salq
+            if self.jogador_local.pontuacao[1] > self.jogador_remoto.pontuacao[1]:
                 self.vencedor = self.jogador_local
-            else:
+            elif self.jogador_local.pontuacao[1] < self.jogador_remoto.pontuacao[1]:
                 self.vencedor = self.jogador_remoto
+            # se os saldos forem iguais, o vencedor é o que tiver mais pontos nas unidades
+            elif self.jogador_local.pontuacao[0] > self.jogador_remoto.pontuacao[0]:
+                self.vencedor = self.jogador_local
+            elif self.jogador_local.pontuacao[0] < self.jogador_remoto.pontuacao[0]:
+                self.vencedor = self.jogador_remoto
+            # se os pontos nos saldos e nas unidades forem iguais, o jogo é um empate
+            else:
+                self.vencedor = None
 
     def update_nome_jogador(self, nome: str, jogador: int):
         if jogador == 1:

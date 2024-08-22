@@ -56,7 +56,7 @@ class Placar(tk.Frame):
             self.jogador2_name = player_name
             self.jogador2_label.config(text=self.jogador2_name)
 
-    def update_player_score(self,jogador: int, score: int):
+    def update_player_score(self,jogador: int, score: tuple[int, int]):
         if jogador == 0:
             self.jogador1_score = score
             self.jogador1_score_label.config(text=str(self.jogador1_score))

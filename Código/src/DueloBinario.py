@@ -26,7 +26,8 @@ class DueloBinario():
             pontuacao_atual = self.jogador_remoto.get_pontuacao()
 
         # pontuacao_atual : (int, int) (unidades, dezenas)
-        pontuacao_parcial_unidades = pontuacao_atual[0] + pontos
+        pontuacao_parcial_unidades = pontuacao_atual[0] 
+        pontuacao_parcial_unidades += pontos
         if pontuacao_parcial_unidades < 0:
             pontuacao_parcial_unidades = 0
 
@@ -176,8 +177,8 @@ class DueloBinario():
         return consequencias_jogada
 
     def reiniciar_placar(self):
-        self.jogador_local.set_pontuacao(0)
-        self.jogador_remoto.set_pontuacao(0)
+        self.jogador_local.set_pontuacao((0,0))
+        self.jogador_remoto.set_pontuacao((0,0))
 
     def reiniciar_tabuleiro(self):
         pass

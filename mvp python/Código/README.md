@@ -7,7 +7,7 @@
 
 ---
 
-### **1. Create and activate a virtual environment:**
+### **1. Create and activate a virtual environment: (Only required for online version)**
 
 ```bash
 python -m venv env

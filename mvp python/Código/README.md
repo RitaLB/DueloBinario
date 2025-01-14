@@ -58,10 +58,11 @@ We do not recommend its use on macOS, as its functionality there is unstable.
 2. **Starting the Game:**  
    Once the game is launched:  
    - For **Mode 1**, simply follow the on-screen prompts to take turns.  
-   - For **Mode 2**, ensure both players are connected and wait for the server to establish the match.  
+ -  For **Mode 2**, ensure both players are connected. One player must click on "Begin Game" in the menu and wait for the server to establish the match between both players connected to the server. 
 
 3. **Gameplay:**  
-   - Insert a binary digit (`0` or `1`) into any empty white cell.  
+   - Insert a binary digit (`0` or `1`) into any empty white cell.
+   - Send move clicking in "Send Move"
    - The goal is to surround a black cell with four binary digits.  
    - When all four surrounding white cells of a black cell are filled, the player who placed the last digit scores the points corresponding to the binary value formed.  
 

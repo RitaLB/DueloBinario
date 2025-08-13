@@ -4,6 +4,10 @@
 
 ## Visão Geral
 
+### Tabuleiro Principal
+![Tela principal do Duelo Binário](jogo.jpg "Tabuleiro 12x12 com casas brancas e pretas. Ao lado, instruções básicas de jogo")
+
+
 O **Duelo Binário** é um desafio lógico que combina estratégia e matemática binária. Os jogadores competem em um tabuleiro xadrez 12x12, inserindo dígitos binários (0 e 1) para formar números decimais e acumular pontos. O objetivo é finalizar a partida com pontuação igual a 1 ou obter a maior pontuação possível.
 
 ## ⚙️ Requisitos
